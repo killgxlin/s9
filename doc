@@ -1,0 +1,23 @@
+seamless world
+	req:玩家在世界中漫游，没有地图的切换
+	v1:不做切换
+		protocal
+			player:id,pos,vel
+			cmove:pos,vel
+			senter:player
+			sadd:player*
+			sremove:id*
+			supdate:player
+		client
+			net
+			view
+		gate
+		cell
+			protoactor
+	final:镜像切换
+		client
+		gate
+		base
+		cell
+		cellman
+
