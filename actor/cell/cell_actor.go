@@ -1,8 +1,8 @@
 package cell
 
 import (
+	"gamelib/actor/plugin/logger"
 	"log"
-	"s7/share/middleware/msglogger"
 
 	"github.com/AsynkronIT/protoactor-go/actor"
 	"github.com/AsynkronIT/protoactor-go/remote"
@@ -71,5 +71,5 @@ func (c *cellActor) Receive(ctx actor.Context) {
 func init() {
 	remote.Register("cell", actor.FromProducer(func() actor.Actor {
 		return &cellActor{}
-	}).WithMiddleware(msglogger.MsgLogger))
+	}).WithMiddleware(logger.MsgLogger))
 }

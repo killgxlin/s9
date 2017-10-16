@@ -3,9 +3,9 @@ package gate
 import (
 	"encoding/binary"
 	"io"
+	"gamelib/base/net"
+	"gamelib/base/util"
 	"reflect"
-	"s7/share/net"
-	"s7/share/util"
 
 	"github.com/gogo/protobuf/proto"
 )

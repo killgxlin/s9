@@ -1,8 +1,8 @@
 package gate
 
 import (
-	"s7/share/middleware/mnet"
-	"s7/share/util"
+	pnet "gamelib/actor/plugin/net"
+	"gamelib/base/util"
 	"s9/actor/cell"
 
 	"github.com/AsynkronIT/protoactor-go/actor"
@@ -24,17 +24,17 @@ func (c *connActor) Receive(ctx actor.Context) {
 		pid, e := cluster.Get("cell", "cell")
 		util.PanicOnErr(e)
 		ctx.Tell(pid, &cell.Disconnect{Id: c.id})
-	case *mnet.ConnectionEvent:
+	case *pnet.ConnectionEvent:
 		ctx.Self().Stop()
 	case *cell.SEnter:
 		c.id = m.Self.Id
-		mnet.SendMsg(ctx, m)
+		pnet.SendMsg(ctx, m)
 	case *cell.SAdd:
-		mnet.SendMsg(ctx, m)
+		pnet.SendMsg(ctx, m)
 	case *cell.SRemove:
-		mnet.SendMsg(ctx, m)
+		pnet.SendMsg(ctx, m)
 	case *cell.SMove:
-		mnet.SendMsg(ctx, m)
+		pnet.SendMsg(ctx, m)
 	case *cell.CMove:
 		pid, e := cluster.Get("cell", "cell")
 		util.PanicOnErr(e)

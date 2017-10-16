@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"log"
-	"s7/share/net"
+	"gamelib/base/net/util"
 	_ "s9/actor/cell"
 	"s9/actor/gate"
 
@@ -29,7 +29,7 @@ func main() {
 	defer cp.Shutdown()
 
 	// cluster
-	addr, e := net.FindLanAddr("tcp", *cport, *cport+1000)
+	addr, e := util.FindLanAddr("tcp", *cport, *cport+1000)
 	if e != nil {
 		log.Panic(e)
 	}

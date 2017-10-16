@@ -3,13 +3,13 @@ package gate
 import (
 	"flag"
 	"fmt"
+	"gamelib/base/handler/cmdhandler"
 	"io"
-	"s8/util"
 )
 
 // handler --------------------------------------------------
 var (
-	handler = util.NewCmdHandler()
+	handler = cmdhandler.NewCmdHandler()
 )
 
 func init() {
