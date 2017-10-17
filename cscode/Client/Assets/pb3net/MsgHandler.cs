@@ -10,18 +10,18 @@ using Google.Protobuf;
 			Debug.Log (m);
 		}
 	}
-
 */
+
 public class MsgHandler
 {
 	// single thread call -----------------------------------------------------
-	static object[] paras = new object[2];
-	static Type[] typs = new Type[2];
-	static object h;
-	public static void SetHandler(object h1) {
+	object[] paras = new object[2];
+	Type[] typs = new Type[2];
+	object h;
+	public void SetHandler(object h1) {
 		h = h1;
 	}
-	public static void HandleMessage(object ctx, object m) {
+	public void HandleMessage(object ctx, object m) {
 		var m1 = (IMessage)m;
 		var ht = h.GetType ();
 

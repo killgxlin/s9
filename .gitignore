@@ -3,3 +3,9 @@ kog
 *.swp
 tmp/*
 vendor/*
+*/*/Library
+*/*/Temp
+*/*/*.app
+*/*/*.apk
+*/*/obj
+*/*/*.userprefs

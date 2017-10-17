@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"log"
 	"gamelib/base/net/util"
+	"log"
 	_ "s9/actor/cell"
 	"s9/actor/gate"
 

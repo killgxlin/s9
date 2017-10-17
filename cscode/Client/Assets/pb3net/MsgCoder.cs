@@ -5,7 +5,6 @@ namespace Pb3Net
 	public class MsgCoder
 	{
 		// message marshal and unmarshal ------------------------------------------
-		static Google.Protobuf.Reflection.TypeRegistry gateType = Google.Protobuf.Reflection.TypeRegistry.FromFiles (Gate.ProtosReflection.Descriptor);
 		static Google.Protobuf.Reflection.TypeRegistry cellType = Google.Protobuf.Reflection.TypeRegistry.FromFiles (Cell.ProtosReflection.Descriptor);
 
 		public static byte[] ToByteArray(object m) {
