@@ -12,17 +12,17 @@ import (
 )
 
 var (
-	delta = time.Millisecond * 100
+	heartbeatInterval = time.Millisecond * 100
 )
 
-type contextData struct {
+type entityData struct {
 	PlayerData
 	Pid *actor.PID
 }
 
 // actor --------------------------------------------------
 type cellActor struct {
-	context map[int32]*contextData
+	context map[int32]*entityData
 	idGen   int32
 
 	lastEv time.Time
@@ -37,12 +37,12 @@ func (c *cellActor) broad(m proto.Message) {
 func (c *cellActor) Receive(ctx actor.Context) {
 	switch m := ctx.Message().(type) {
 	case *actor.Started:
-		c.context = map[int32]*contextData{}
+		c.context = map[int32]*entityData{}
 	case *actor.Stopping, *actor.Restarting:
 	case *Connected:
 		c.idGen++
 
-		p := &contextData{
+		p := &entityData{
 			PlayerData: PlayerData{
 				Id:  c.idGen,
 				Pos: &Vector3{0, 0, 0},
@@ -94,6 +94,6 @@ func init() {
 		return &cellActor{}
 	}).WithMiddleware(
 		//logger.MsgLogger,
-		plugin.Use(timer.NewTimer(delta)),
+		plugin.Use(timer.NewTimer(heartbeatInterval)),
 	))
 }

@@ -14,6 +14,38 @@ seamless world
 		gate
 		cell
 			protoactor
+	v2:简单切换
+		client
+		gate
+		cell
+		cellman
+
+		phase_normal
+			cl>gw	cmove
+			gw>ce	cmove
+		event_mirror
+			ce>cm	cinit
+			cm>ce1	cinit
+		phase_mirror
+			cl>gw	cmove
+			gw>ce	cmove
+			ce>cm	cmove
+			cm->ce1	cmove
+			ce1->gw	cmove
+		event_switch
+			ce->cm	switch
+			cm->ce1	switch
+			ce1->gw	switch_cell
+		phase_mirror
+			cl->gw	cmove
+			gw->ce1	cmove
+			ce1->cm	cmove
+			cm->ce	cmove
+			ce->gw	cmove
+		event_mirrorfin
+			ce1->cm	mirror_fin
+			cm->ce	mirror_fin
+
 	final:镜像切换
 		client
 		gate
@@ -21,31 +53,12 @@ seamless world
 		cell
 		cellman
 
-tree
-	base
-		file
-		net
-			util
-			connection
-			acceptor
-			packer
-				line
-				packet
-			coder
-				string
-				protobuf
-		handler
-			cmdhandler
-			typhandler
-		util
-		profile
-	actor
-		plugins
-			acceptor
-			connection
-			msglogger
-			timer
-		util
-	etcd
-		discover
-
+cell
+	entity
+	ghost
+cellman
+	cells
+	cell
+		mirrorLine
+		switchLine
+base
