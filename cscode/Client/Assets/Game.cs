@@ -29,7 +29,7 @@ public class Game {
 	/// </summary>
 	public class PlayerData {
 		public Stub stub;
-		public Cell.PlayerData data;
+		public Msg.PlayerData data;
 	}
 	Dictionary<int, PlayerData> players = new Dictionary<int, PlayerData>();
 	void updatePlayers(float delta) {
@@ -58,14 +58,14 @@ public class Game {
 	/// <summary>
 	/// input
 	/// </summary>
-	Cell.Vector3 lastDir = new Cell.Vector3();
+	Msg.Vector3 lastDir = new Msg.Vector3();
 	void updateInput ()
 	{
 		var dir = Util.GetInput ();
 		if (!lastDir.Equals (dir)) {
 			var d = self.data.Clone ();
 			d.Vel = dir;
-			conn.SendMessage (new Cell.CMove {
+			conn.SendMessage (new Msg.CMove {
 				Data = d
 			});
 		}
@@ -83,7 +83,7 @@ public class Game {
 			}
 		}
 	}
-	void On(object ctx, Cell.SEnter m) {
+	void On(object ctx, Msg.SEnter m) {
 		var stub = Util.CreateStub (m.Self);
 		self = new PlayerData{ data = m.Self, stub = stub };
 		players.Add (m.Self.Id, self);
@@ -92,18 +92,18 @@ public class Game {
 			players.Add (itr.Current.Id, new PlayerData{ data = itr.Current, stub = stub });
 		}
 	}
-	void On(object ctx, Cell.SAdd m) {
+	void On(object ctx, Msg.SAdd m) {
 		var sub = Util.CreateStub (m.Data);
 		players.Add (m.Data.Id, new PlayerData{ data = m.Data, stub = sub });
 	}
-	void On(object ctx, Cell.SRemove m) {
+	void On(object ctx, Msg.SRemove m) {
 		PlayerData data;
 		if (!players.TryGetValue (m.Id, out data))
 			return;
 		data.stub.Destroy ();
 		players.Remove (m.Id);
 	}
-	void On(object ctx, Cell.SMove m) {
+	void On(object ctx, Msg.SMove m) {
 		PlayerData data;
 		if (!players.TryGetValue (m.Data.Id, out data))
 			return;

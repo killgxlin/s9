@@ -18,7 +18,7 @@ public class Util
 
 		return stub;
 	}
-	static public Stub CreateStub(Cell.PlayerData data) {
+	static public Stub CreateStub(Msg.PlayerData data) {
 		var obj = GameObject.CreatePrimitive (PrimitiveType.Cylinder);
 		obj.name = string.Format ("gameobj_{0}", data.Id);
 
@@ -27,7 +27,7 @@ public class Util
 
 		return stub;
 	}
-	static public Cell.Vector3 GetInput() {
+	static public Msg.Vector3 GetInput() {
 		var dir = Vector3.zero;
 		if (Input.GetKey (KeyCode.A)) {
 			dir.x = -1;
@@ -44,6 +44,6 @@ public class Util
 		if (dir != Vector3.zero)
 			dir.Normalize ();
 		
-		return new Cell.Vector3{ X = dir.x, Y = dir.y, Z = dir.z };
+		return new Msg.Vector3{ X = dir.x, Y = dir.y, Z = dir.z };
 	}
 }

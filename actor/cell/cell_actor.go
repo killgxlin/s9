@@ -3,6 +3,7 @@ package cell
 import (
 	"gamelib/actor/plugin/timer"
 	"log"
+	"s9/msg"
 	"time"
 
 	"github.com/AsynkronIT/protoactor-go/actor"
@@ -16,7 +17,7 @@ var (
 )
 
 type entityData struct {
-	PlayerData
+	msg.PlayerData
 	Pid *actor.PID
 }
 
@@ -39,34 +40,34 @@ func (c *cellActor) Receive(ctx actor.Context) {
 	case *actor.Started:
 		c.context = map[int32]*entityData{}
 	case *actor.Stopping, *actor.Restarting:
-	case *Connected:
+	case *msg.Connected:
 		c.idGen++
 
 		p := &entityData{
-			PlayerData: PlayerData{
+			PlayerData: msg.PlayerData{
 				Id:  c.idGen,
-				Pos: &Vector3{0, 0, 0},
-				Vel: &Vector3{0, 0, 0},
+				Pos: &msg.Vector3{0, 0, 0},
+				Vel: &msg.Vector3{0, 0, 0},
 			},
 			Pid: ctx.Sender(),
 		}
 
-		c.broad(&SAdd{Data: &p.PlayerData})
+		c.broad(&msg.SAdd{Data: &p.PlayerData})
 
-		ent := &SEnter{Self: &p.PlayerData}
+		ent := &msg.SEnter{Self: &p.PlayerData}
 		for _, c := range c.context {
 			ent.Other = append(ent.Other, &c.PlayerData)
 		}
 		ctx.Respond(ent)
 		c.context[p.Id] = p
-	case *Disconnect:
+	case *msg.Disconnect:
 		context, ok := c.context[m.Id]
 		if !ok {
 			return
 		}
 		delete(c.context, context.Id)
-		c.broad(&SRemove{Id: context.Id})
-	case *CMove:
+		c.broad(&msg.SRemove{Id: context.Id})
+	case *msg.CMove:
 		context, ok := c.context[m.Data.Id]
 		if !ok {
 			return
@@ -75,7 +76,7 @@ func (c *cellActor) Receive(ctx actor.Context) {
 		log.Println(context.PlayerData)
 		context.PlayerData = *m.Data
 		log.Println(context.PlayerData)
-		c.broad(&SMove{Data: m.Data})
+		c.broad(&msg.SMove{Data: m.Data})
 	case timer.TimerEvent:
 		now := time.Now()
 		delta := float32(now.Sub(c.lastEv).Seconds())

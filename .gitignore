@@ -7,5 +7,7 @@ vendor/*
 */*/Temp
 */*/*.app
 */*/*.apk
+*/*/*.sln
+*/*/*.csproj
 */*/obj
 */*/*.userprefs

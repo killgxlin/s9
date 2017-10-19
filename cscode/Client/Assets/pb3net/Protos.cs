@@ -7,7 +7,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Cell {
+namespace Msg {
 
   /// <summary>Holder for reflection information generated from protos.proto</summary>
   public static partial class ProtosReflection {
@@ -22,28 +22,27 @@ namespace Cell {
     static ProtosReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cgxwcm90b3MucHJvdG8SBGNlbGwiKgoHVmVjdG9yMxIJCgF4GAEgASgCEgkK",
-            "AXkYAiABKAISCQoBehgDIAEoAiJQCgpQbGF5ZXJEYXRhEgoKAmlkGAEgASgF",
-            "EhoKA3BvcxgCIAEoCzINLmNlbGwuVmVjdG9yMxIaCgN2ZWwYAyABKAsyDS5j",
-            "ZWxsLlZlY3RvcjMiGAoKRGlzY29ubmVjdBIKCgJpZBgBIAEoBSILCglDb25u",
-            "ZWN0ZWQiSQoGU0VudGVyEh4KBHNlbGYYASABKAsyEC5jZWxsLlBsYXllckRh",
-            "dGESHwoFb3RoZXIYAiADKAsyEC5jZWxsLlBsYXllckRhdGEiJgoEU0FkZBIe",
-            "CgRkYXRhGAEgASgLMhAuY2VsbC5QbGF5ZXJEYXRhIhUKB1NSZW1vdmUSCgoC",
-            "aWQYASABKAUiJwoFQ01vdmUSHgoEZGF0YRgBIAEoCzIQLmNlbGwuUGxheWVy",
-            "RGF0YSInCgVTTW92ZRIeCgRkYXRhGAEgASgLMhAuY2VsbC5QbGF5ZXJEYXRh",
-            "YgZwcm90bzM="));
+            "Cgxwcm90b3MucHJvdG8SA21zZyIqCgdWZWN0b3IzEgkKAXgYASABKAISCQoB",
+            "eRgCIAEoAhIJCgF6GAMgASgCIk4KClBsYXllckRhdGESCgoCaWQYASABKAUS",
+            "GQoDcG9zGAIgASgLMgwubXNnLlZlY3RvcjMSGQoDdmVsGAMgASgLMgwubXNn",
+            "LlZlY3RvcjMiGAoKRGlzY29ubmVjdBIKCgJpZBgBIAEoBSILCglDb25uZWN0",
+            "ZWQiRwoGU0VudGVyEh0KBHNlbGYYASABKAsyDy5tc2cuUGxheWVyRGF0YRIe",
+            "CgVvdGhlchgCIAMoCzIPLm1zZy5QbGF5ZXJEYXRhIiUKBFNBZGQSHQoEZGF0",
+            "YRgBIAEoCzIPLm1zZy5QbGF5ZXJEYXRhIhUKB1NSZW1vdmUSCgoCaWQYASAB",
+            "KAUiJgoFQ01vdmUSHQoEZGF0YRgBIAEoCzIPLm1zZy5QbGF5ZXJEYXRhIiYK",
+            "BVNNb3ZlEh0KBGRhdGEYASABKAsyDy5tc2cuUGxheWVyRGF0YWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.Vector3), global::Cell.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.PlayerData), global::Cell.PlayerData.Parser, new[]{ "Id", "Pos", "Vel" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.Disconnect), global::Cell.Disconnect.Parser, new[]{ "Id" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.Connected), global::Cell.Connected.Parser, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.SEnter), global::Cell.SEnter.Parser, new[]{ "Self", "Other" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.SAdd), global::Cell.SAdd.Parser, new[]{ "Data" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.SRemove), global::Cell.SRemove.Parser, new[]{ "Id" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.CMove), global::Cell.CMove.Parser, new[]{ "Data" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Cell.SMove), global::Cell.SMove.Parser, new[]{ "Data" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.Vector3), global::Msg.Vector3.Parser, new[]{ "X", "Y", "Z" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.PlayerData), global::Msg.PlayerData.Parser, new[]{ "Id", "Pos", "Vel" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.Disconnect), global::Msg.Disconnect.Parser, new[]{ "Id" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.Connected), global::Msg.Connected.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SEnter), global::Msg.SEnter.Parser, new[]{ "Self", "Other" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SAdd), global::Msg.SAdd.Parser, new[]{ "Data" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SRemove), global::Msg.SRemove.Parser, new[]{ "Id" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.CMove), global::Msg.CMove.Parser, new[]{ "Data" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SMove), global::Msg.SMove.Parser, new[]{ "Data" }, null, null, null)
           }));
     }
     #endregion
@@ -57,7 +56,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -230,7 +229,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -270,9 +269,9 @@ namespace Cell {
 
     /// <summary>Field number for the "pos" field.</summary>
     public const int PosFieldNumber = 2;
-    private global::Cell.Vector3 pos_;
+    private global::Msg.Vector3 pos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Cell.Vector3 Pos {
+    public global::Msg.Vector3 Pos {
       get { return pos_; }
       set {
         pos_ = value;
@@ -281,9 +280,9 @@ namespace Cell {
 
     /// <summary>Field number for the "vel" field.</summary>
     public const int VelFieldNumber = 3;
-    private global::Cell.Vector3 vel_;
+    private global::Msg.Vector3 vel_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Cell.Vector3 Vel {
+    public global::Msg.Vector3 Vel {
       get { return vel_; }
       set {
         vel_ = value;
@@ -364,13 +363,13 @@ namespace Cell {
       }
       if (other.pos_ != null) {
         if (pos_ == null) {
-          pos_ = new global::Cell.Vector3();
+          pos_ = new global::Msg.Vector3();
         }
         Pos.MergeFrom(other.Pos);
       }
       if (other.vel_ != null) {
         if (vel_ == null) {
-          vel_ = new global::Cell.Vector3();
+          vel_ = new global::Msg.Vector3();
         }
         Vel.MergeFrom(other.Vel);
       }
@@ -390,14 +389,14 @@ namespace Cell {
           }
           case 18: {
             if (pos_ == null) {
-              pos_ = new global::Cell.Vector3();
+              pos_ = new global::Msg.Vector3();
             }
             input.ReadMessage(pos_);
             break;
           }
           case 26: {
             if (vel_ == null) {
-              vel_ = new global::Cell.Vector3();
+              vel_ = new global::Msg.Vector3();
             }
             input.ReadMessage(vel_);
             break;
@@ -415,7 +414,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -532,7 +531,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -621,7 +620,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -649,9 +648,9 @@ namespace Cell {
 
     /// <summary>Field number for the "self" field.</summary>
     public const int SelfFieldNumber = 1;
-    private global::Cell.PlayerData self_;
+    private global::Msg.PlayerData self_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Cell.PlayerData Self {
+    public global::Msg.PlayerData Self {
       get { return self_; }
       set {
         self_ = value;
@@ -660,11 +659,11 @@ namespace Cell {
 
     /// <summary>Field number for the "other" field.</summary>
     public const int OtherFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Cell.PlayerData> _repeated_other_codec
-        = pb::FieldCodec.ForMessage(18, global::Cell.PlayerData.Parser);
-    private readonly pbc::RepeatedField<global::Cell.PlayerData> other_ = new pbc::RepeatedField<global::Cell.PlayerData>();
+    private static readonly pb::FieldCodec<global::Msg.PlayerData> _repeated_other_codec
+        = pb::FieldCodec.ForMessage(18, global::Msg.PlayerData.Parser);
+    private readonly pbc::RepeatedField<global::Msg.PlayerData> other_ = new pbc::RepeatedField<global::Msg.PlayerData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Cell.PlayerData> Other {
+    public pbc::RepeatedField<global::Msg.PlayerData> Other {
       get { return other_; }
     }
 
@@ -725,7 +724,7 @@ namespace Cell {
       }
       if (other.self_ != null) {
         if (self_ == null) {
-          self_ = new global::Cell.PlayerData();
+          self_ = new global::Msg.PlayerData();
         }
         Self.MergeFrom(other.Self);
       }
@@ -742,7 +741,7 @@ namespace Cell {
             break;
           case 10: {
             if (self_ == null) {
-              self_ = new global::Cell.PlayerData();
+              self_ = new global::Msg.PlayerData();
             }
             input.ReadMessage(self_);
             break;
@@ -764,7 +763,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -791,9 +790,9 @@ namespace Cell {
 
     /// <summary>Field number for the "data" field.</summary>
     public const int DataFieldNumber = 1;
-    private global::Cell.PlayerData data_;
+    private global::Msg.PlayerData data_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Cell.PlayerData Data {
+    public global::Msg.PlayerData Data {
       get { return data_; }
       set {
         data_ = value;
@@ -853,7 +852,7 @@ namespace Cell {
       }
       if (other.data_ != null) {
         if (data_ == null) {
-          data_ = new global::Cell.PlayerData();
+          data_ = new global::Msg.PlayerData();
         }
         Data.MergeFrom(other.Data);
       }
@@ -869,7 +868,7 @@ namespace Cell {
             break;
           case 10: {
             if (data_ == null) {
-              data_ = new global::Cell.PlayerData();
+              data_ = new global::Msg.PlayerData();
             }
             input.ReadMessage(data_);
             break;
@@ -887,7 +886,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1004,7 +1003,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1031,9 +1030,9 @@ namespace Cell {
 
     /// <summary>Field number for the "data" field.</summary>
     public const int DataFieldNumber = 1;
-    private global::Cell.PlayerData data_;
+    private global::Msg.PlayerData data_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Cell.PlayerData Data {
+    public global::Msg.PlayerData Data {
       get { return data_; }
       set {
         data_ = value;
@@ -1093,7 +1092,7 @@ namespace Cell {
       }
       if (other.data_ != null) {
         if (data_ == null) {
-          data_ = new global::Cell.PlayerData();
+          data_ = new global::Msg.PlayerData();
         }
         Data.MergeFrom(other.Data);
       }
@@ -1109,7 +1108,7 @@ namespace Cell {
             break;
           case 10: {
             if (data_ == null) {
-              data_ = new global::Cell.PlayerData();
+              data_ = new global::Msg.PlayerData();
             }
             input.ReadMessage(data_);
             break;
@@ -1127,7 +1126,7 @@ namespace Cell {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Cell.ProtosReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Msg.ProtosReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1154,9 +1153,9 @@ namespace Cell {
 
     /// <summary>Field number for the "data" field.</summary>
     public const int DataFieldNumber = 1;
-    private global::Cell.PlayerData data_;
+    private global::Msg.PlayerData data_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Cell.PlayerData Data {
+    public global::Msg.PlayerData Data {
       get { return data_; }
       set {
         data_ = value;
@@ -1216,7 +1215,7 @@ namespace Cell {
       }
       if (other.data_ != null) {
         if (data_ == null) {
-          data_ = new global::Cell.PlayerData();
+          data_ = new global::Msg.PlayerData();
         }
         Data.MergeFrom(other.Data);
       }
@@ -1232,7 +1231,7 @@ namespace Cell {
             break;
           case 10: {
             if (data_ == null) {
-              data_ = new global::Cell.PlayerData();
+              data_ = new global::Msg.PlayerData();
             }
             input.ReadMessage(data_);
             break;
