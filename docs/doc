@@ -53,12 +53,5 @@ seamless world
 		cell
 		cellman
 
-cell
-	entity
-	ghost
-cellman
-	cells
-	cell
-		mirrorLine
-		switchLine
-base
+
+
