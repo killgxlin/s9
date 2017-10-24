@@ -33,19 +33,26 @@ proto
 			Entity
 				outer.PlayerData data	// data used in client
 				PID connPID				// connPID of connection
-				bool isGhost			// is ghost
-				PID isTransferred		// is transferred to other cell
+				PID entityPID			// PID of entity's cell, if not nil then i'm a ghost else i'm an entity
 		msg----------------------------------
+			Auth
+				string account
 			Enter		// load player in the cell
 				int id		// userid
 				Entity entity
+				// create entity
 			Exit		// save player in the cell
 				int id		// userid
+				// delete entity
 			Sync		// sync entity to mirror cell
 				Entity entity	
+				// recver create ghost of entity
 			Transfer	// transfer entity to other cell
 				Entity entity
-
+				// sender delete entity
+				// recver create entity
+			TransferOk	// transferred
+				int id
 actor
 	AuthActor
 		idGen
@@ -60,7 +67,7 @@ actor
 		PID cellPID
 
 		OnCLogin(CLogin m)
-			id = authPID.RequestFuture(Auth, m.account)
+			id = authPID.RequestFuture(Auth{m.account})
 			cellmanPID.Request(selfPID, Enter{id})
 		OnDisconnect
 			if cellPID!=nil{
@@ -79,61 +86,31 @@ actor
 	CellActor
 		Cell thisCell
 		repeated Cell neighborCells
+		repeated Entity transferrings
 
 		repeated Entity entities
 
 		OnEnter(Enter m)
-			entities.Add(m.entity.id,m.entity)
-
-			m.entity.connPID.Request(selfPID, SEnter{m.entity.data})
-			broad(SAdd{m.entity.data})
+			entities.Add(m.entity.id, m.entity)
+			checkCell(m.entity)
 		OnCMove(CMove m)
-			entity = entities.Get(m.data.id)
-			if entity.isTransferred!=nil {
-				entity.isTransferred.Request(m)
-				return
-			}
-
-			entity.data = m.data
-			broad(SMove{entity.data})
 		OnExit(Exit m)
-			entity = entities.Get(m.id)
-			broad(SRemove{m.id})
-			entities.Remove(m.id)
 		OnSync(Sync m)
-			entity = entities.Get(m.entity.id)
-			if entity!=nil {
-				entity.data = m.entity
-			}
-			entity = m.entity
-			entity.isGhost = true
-			entity.isTransferred = nil
-			entities.Add(entity.id, entity)
+			m.entity.entityPID = senderPID
+			entities.Add(m.entity.id, m.entity)
+		OnTransferred(Transferred m)
+			transferrings.Remove(m.id)
 		OnTransfer(Transfer m)
-			entities.Set(m.entity.id, m.entity)
-			m.entity.connPID.Request(selfPID, m)
+			entities.Add(m.entity.id, m.entity)
+			senderPID.Tell(Transferred{m.entity.id})
 		onEntityEnterGhostZone(Cell other, Entity entity)
-			if entity.isGhost {
-				return
-			}
-			if entity.isTransferred!=nil {
-				return
-			}
-			other.pid.Tell(Sync{entity})
+			other.Request(Sync{entity})
 		onEntityExitGhostZone(Cell other, Entity entity)
-			if !entity.isGhost {
-				return
-			}
 			entities.Remove(entity.id)
-		onEntityCrossTransferEdge(Cell other, Entity entity)
-			if entity.isGhost {
-				return
-			}
-			if entity.isTransferred!=nil {
-				return
-			}
-			other.pid.Tell(Transfer{entity})
-			entity.isTransferred = other.pid
+		onEntityTransfer(Cell other, Entity entity)
+			entity.entityPID = other.PID
+			transferrings.Add(entity)
+			entities.Remove(entity.id)
 
 	CellmanActor
 		repeated Cell cells
@@ -141,13 +118,14 @@ actor
 		OnEnter(Enter m)
 			m.entity = loadData(m.id)
 			m.entity.connPID = senderPID
-			cellPID = cells.Find(m.entity.data)
+			cellPID = cells.FindEnterCell(m.entity.data)
 			cellPID.Tell(m)
 		OnExit(Exit m)
 			cellPID = cells.find(m.entity.data)
 			cellPID.Tell(m)
-		OnCMove(CMove m)
-			cellPID = cells.findEntityCell(m.data)
-			cellPID.Tell(m)
 			
 			
+milestones
+	add imsg and msg
+	change cell
+	switch
