@@ -6,7 +6,7 @@ public class Game {
 	MsgHandler handler = new MsgHandler ();
 	Pb3Net.TcpManager conn = new Pb3Net.TcpManager();
 	PlayerData self;
-	Stub cam;
+	PlayerStub cam;
 	public void Start (Main main) {
 		Instance = this;
 
@@ -29,7 +29,7 @@ public class Game {
 	/// player
 	/// </summary>
 	public class PlayerData {
-		public Stub stub;
+		public PlayerStub stub;
 		public Msg.PlayerData data;
 	}
 	Dictionary<int, PlayerData> players = new Dictionary<int, PlayerData>();
@@ -51,8 +51,7 @@ public class Game {
 	void updateCamera ()
 	{
 		var pos = self.data.Pos.Clone ();
-		pos.Y = 10;
-		cam.setPos (pos);
+		cam.setCamPos (pos);
 	}
 
 	/// <summary>
@@ -88,11 +87,15 @@ public class Game {
 			}
 		}
 	}
+
+	Dictionary<string, CellStub> cells = new Dictionary<string, CellStub>();
 	void On(object ctx, Msg.SEnterCell m) {
 		var stub = Util.CreateStub (m.Self);
 		self = new PlayerData{ data = m.Self, stub = stub };
 		players.Add (m.Self.Id, self);
 
+		var cell = Util.CreateCell (m.Cell);
+		cells.Add (cell.name, cell);
 	}
 	void On(object ctx, Msg.SLeaveCell m) {
 		//m.CalculateSize;
@@ -102,6 +105,10 @@ public class Game {
 
 		p.stub.Destroy ();
 		players.Remove (p.data.Id);
+
+		var cell = cells [m.CellName];
+		cell.Destroy ();
+		cells.Remove (m.CellName);
 	}
 	void On(object ctx, Msg.SAdd m) {
 		for (var itr = m.Data.GetEnumerator (); itr.MoveNext ();) {

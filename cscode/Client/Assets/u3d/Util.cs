@@ -7,26 +7,33 @@ public class Util
 	{
 		return UnityEngine.Mathf.Approximately (a, b);
 	}
-	static public Stub AttachStub(string name) {
+	static public PlayerStub AttachStub(string name) {
 		var obj = GameObject.Find (name);
 		if (obj == null)
 			return null;
 
-		var stub = obj.GetComponent<Stub> ();
+		var stub = obj.GetComponent<PlayerStub> ();
 		if (stub == null)
-			stub = obj.AddComponent<Stub> ();
+			stub = obj.AddComponent<PlayerStub> ();
 
 		return stub;
 	}
-	static public Stub CreateStub(Msg.PlayerData data) {
+	static public PlayerStub CreateStub(Msg.PlayerData data) {
 		var obj = GameObject.CreatePrimitive (PrimitiveType.Cylinder);
 		obj.name = string.Format ("gameobj_{0}", data.Id);
 
-		var stub = obj.AddComponent<Stub> ();
+		var stub = obj.AddComponent<PlayerStub> ();
 		stub.setPos (data.Pos);
 
 		return stub;
 	}
+	static public CellStub CreateCell(Msg.Cell cell) {
+		var obj = new GameObject (cell.Name);
+		var stub = obj.AddComponent<CellStub>();
+		stub.Init (cell);
+		return stub;
+	}
+
 	static public Msg.Vector2 GetInput() {
 		var dir = Vector3.zero;
 		if (Input.GetKey (KeyCode.A)) {

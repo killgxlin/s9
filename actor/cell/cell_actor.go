@@ -5,7 +5,6 @@ import (
 	"gamelib/actor/plugin/timer"
 	"gamelib/base/util"
 	"log"
-	"reflect"
 	"s9/imsg"
 	"s9/msg"
 	"time"
@@ -24,7 +23,7 @@ var (
 // actor --------------------------------------------------
 type cellActor struct {
 	entities map[int32]*imsg.Entity
-	cell     *imsg.Cell
+	cell     *msg.Cell
 
 	lastEv time.Time
 }
@@ -62,8 +61,8 @@ func (c *cellActor) broad(ctx actor.Context, m proto.Message) {
 }
 func (c *cellActor) onSwitchCell(ctx actor.Context, entity *imsg.Entity) {
 	c.remove(ctx, entity)
-	ctx.Request(entity.AgentPID, &msg.SLeaveCell{CellName: ctx.Self().Id})
-	dstCellPID := imsg.GetCellPID(entity.Data.Pos)
+	ctx.Request(entity.AgentPID, &msg.SLeaveCell{CellName: c.cell.Name})
+	dstCellPID := msg.GetCellPID(entity.Data.Pos)
 	ctx.Request(dstCellPID, &imsg.SwitchCellReq{Entity: entity})
 }
 
@@ -71,7 +70,7 @@ func (c *cellActor) Receive(ctx actor.Context) {
 	switch m := ctx.Message().(type) {
 	case *actor.Started:
 		c.entities = map[int32]*imsg.Entity{}
-		c.cell = imsg.GetCell(ctx.Self())
+		c.cell = msg.GetCell(ctx.Self())
 		c.lastEv = time.Now()
 	case *actor.Stopping, *actor.Restarting:
 	case *imsg.ExitSceneReq:
@@ -100,8 +99,8 @@ func (c *cellActor) Receive(ctx actor.Context) {
 		ctx.Request(
 			m.Entity.AgentPID,
 			&msg.SEnterCell{
-				Self:     m.Entity.Data,
-				CellName: ctx.Self().Id,
+				Self: m.Entity.Data,
+				Cell: c.cell,
 			})
 		c.add(ctx, m.Entity)
 	case timer.TimerEvent:
@@ -126,7 +125,9 @@ func (c *cellActor) Receive(ctx actor.Context) {
 }
 
 func init() {
-	logger.Filter(reflect.TypeOf(timer.TimerEvent{}), reflect.TypeOf(&actor.Started{}))
+	logger.Filter(
+		timer.TimerEvent{},
+		&actor.Started{})
 	remote.Register("cell", actor.FromProducer(func() actor.Actor {
 		return &cellActor{}
 	}).WithMiddleware(

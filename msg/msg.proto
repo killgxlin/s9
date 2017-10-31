@@ -7,6 +7,19 @@ message Vector2 {
 	float y = 2;
 }
 
+message AABB {
+	float minx = 1;
+	float maxx = 2;
+	float miny = 3;
+	float maxy = 4;
+}
+
+message Cell {
+	string name = 1;
+	AABB border = 2;
+	AABB switch_border = 3;
+}
+
 message PlayerData {
 	int32 id = 1;
 	Vector2 pos = 2;
@@ -24,7 +37,7 @@ message CUpdate {
 
 message SEnterCell {
 	PlayerData self = 1;
-	string cell_name = 2;
+	Cell cell = 2;
 }
 
 message SLeaveCell {

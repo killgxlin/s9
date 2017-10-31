@@ -1,14 +1,17 @@
 package gate
 
 import (
+	"gamelib/actor/plugin/logger"
 	pnet "gamelib/actor/plugin/net"
 	"gamelib/base/util"
+	snet "net"
 	"s9/imsg"
 	"s9/msg"
 	"time"
 
 	"github.com/AsynkronIT/protoactor-go/actor"
 	"github.com/AsynkronIT/protoactor-go/cluster"
+	"github.com/AsynkronIT/protoactor-go/plugin"
 )
 
 // actor --------------------------------------------------
@@ -56,4 +59,15 @@ func (aa *agentActor) Receive(ctx actor.Context) {
 	case *msg.SUpdate:
 		pnet.SendMsg(ctx, m)
 	}
+}
+
+var (
+	msgio = NewReadWriter()
+)
+
+func startAgent(c *snet.TCPConn) *actor.Props {
+	return actor.FromInstance(&agentActor{}).WithMiddleware(
+		logger.MsgLogger,
+		plugin.Use(pnet.NewConnection(c, msgio, true, true, -1)),
+	)
 }

@@ -36,7 +36,7 @@ func (s *sceneActor) Receive(ctx actor.Context) {
 			}
 			s.playerDatas[data.Id] = data
 		}
-		pid := imsg.GetCellPID(data.Pos)
+		pid := msg.GetCellPID(data.Pos)
 		ctx.Tell(
 			pid,
 			&imsg.SwitchCellReq{

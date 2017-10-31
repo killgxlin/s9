@@ -2,6 +2,7 @@ s9
 kog
 *.swp
 tmp/*
+*.log
 vendor/*
 */*/Library
 */*/Temp

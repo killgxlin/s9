@@ -1,8 +1,6 @@
-package imsg
+package msg
 
-import "s9/msg"
-
-func (ab *AABB) Include(pos *msg.Vector2) bool {
+func (ab *AABB) Include(pos *Vector2) bool {
 	return pos.X >= ab.Minx && pos.X < ab.Maxx && pos.Y >= ab.Miny && pos.Y < ab.Maxy
 }
 

@@ -3,19 +3,6 @@ package imsg;
 import "s9/msg/msg.proto";
 import "github.com/AsynkronIT/protoactor-go/actor/protos.proto";
 
-message AABB {
-	float minx = 1;
-	float maxx = 2;
-	float miny = 3;
-	float maxy = 4;
-}
-
-message Cell {
-	AABB border = 1;
-	AABB switch_border = 2;
-}
-
-
 message Entity {
 	msg.PlayerData data = 1;
 	actor.PID agentPID = 2;

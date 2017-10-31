@@ -1,10 +1,9 @@
-package imsg
+package msg
 
 import (
 	"fmt"
 	"gamelib/base/util"
 	"math"
-	"s9/msg"
 	"strconv"
 	"strings"
 
@@ -17,13 +16,13 @@ const (
 	SwitchDist = 0.5
 )
 
-func GetCellName(pos *msg.Vector2) string {
+func GetCellName(pos *Vector2) string {
 	xIdx := int(pos.X / CellSize)
 	yIdx := int(pos.Y / CellSize)
 	return fmt.Sprintf("cell_%d_%d", xIdx, yIdx)
 }
 
-func GetCellPID(pos *msg.Vector2) *actor.PID {
+func GetCellPID(pos *Vector2) *actor.PID {
 	name := GetCellName(pos)
 	pid, e := cluster.Get(name, "cell")
 	util.PanicOnErr(e)
@@ -61,13 +60,14 @@ func GetCellByName(name string) *Cell {
 	sb := border.Clone()
 	sb.Increase(SwitchDist)
 
-	return &Cell{Border: border, SwitchBorder: sb}
+	return &Cell{Name: name, Border: border, SwitchBorder: sb}
 }
 
 func GetCell(pid *actor.PID) *Cell {
-	return GetCellByName(pid.Id)
+	name := strings.Split(pid.Id, "$")[1]
+	return GetCellByName(name)
 }
 
-func (c *Cell) OutOfSwitchBorder(pos *msg.Vector2) bool {
+func (c *Cell) OutOfSwitchBorder(pos *Vector2) bool {
 	return !c.SwitchBorder.Include(pos)
 }

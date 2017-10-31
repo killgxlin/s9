@@ -6,7 +6,6 @@ import (
 	"gamelib/base/net/util"
 	"log"
 	"s9/actor/gate"
-	"s9/imsg"
 	"s9/msg"
 
 	_ "s9/actor/auth"
@@ -26,8 +25,8 @@ var (
 func testA() {
 	for x := -10; x < 10; x++ {
 		v := &msg.Vector2{float32(x), 0}
-		name := imsg.GetCellName(v)
-		c := imsg.GetCellByName(name)
+		name := msg.GetCellName(v)
+		c := msg.GetCellByName(name)
 		fmt.Println(v, name, c)
 	}
 	return
