@@ -27,11 +27,11 @@ func (g *gateActor) Receive(ctx actor.Context) {
 		}
 		log.Printf("gate port:%v", m.GetPort())
 		if m.C != nil {
-			p := actor.FromInstance(&connActor{}).WithMiddleware(
-				logger.MsgLogger,
+			p := actor.FromInstance(&agentActor{}).WithMiddleware(
+				//logger.MsgLogger,
 				plugin.Use(pnet.NewConnection(m.C, msgio, true, true, -1)),
 			)
-			ctx.SpawnPrefix(p, "conn")
+			ctx.SpawnPrefix(p, "agent")
 		}
 	}
 }

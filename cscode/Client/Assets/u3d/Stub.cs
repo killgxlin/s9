@@ -6,7 +6,7 @@ public class Stub : MonoBehaviour {
 	public void Destroy() {
 		Destroy (gameObject);
 	}
-	public void setPos(Msg.Vector3 pos) {
-		transform.position = new Vector3 (pos.X, pos.Y, pos.Z);
+	public void setPos(Msg.Vector2 pos) {
+		transform.position = new Vector3 (pos.X, pos.Y, 0);
 	}
 }

@@ -1,0 +1,46 @@
+syntax = "proto3";
+package msg;
+//import "github.com/AsynkronIT/protoactor-go/actor/protos.proto";
+
+message Vector2 {
+	float x = 1;
+	float y = 2;
+}
+
+message PlayerData {
+	int32 id = 1;
+	Vector2 pos = 2;
+	Vector2 vel = 3;
+}
+
+message CLogin {
+	string account = 1;
+}
+
+message CUpdate {
+	PlayerData data = 1;
+}
+
+
+message SEnterCell {
+	PlayerData self = 1;
+	string cell_name = 2;
+}
+
+message SLeaveCell {
+	string cell_name = 1;
+}
+
+
+message SAdd {
+	repeated PlayerData data = 1;
+}
+
+message SRemove {
+	repeated int32 id = 1;
+}
+
+message SUpdate {
+	PlayerData data = 1;
+}
+

@@ -15,6 +15,9 @@ seamless world
 		cell
 			protoactor
 	v2:简单切换
+		add imsg and msg
+		change cell
+		switch
 		
 	final:镜像切换
 		draft4

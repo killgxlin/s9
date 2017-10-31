@@ -1,0 +1,78 @@
+proto
+	outer
+		data----------------------------------
+			Vector2
+				float x,y
+			PlayerData
+				int id
+				Vector2 pos,vel
+		msg----------------------------------
+			CLogin
+				string account
+			CUpdate
+				PlayerData data
+			SEnterCell
+				PlayerData self
+			SLeaveCell
+			SAdd
+				repeated PlayerData others
+			SRemove
+				repeated int id
+			SUpdate
+				PlayerData data
+			
+	inner
+		data----------------------------------
+			AABB
+				float minx, miny
+				float maxx, maxy
+			Cell
+				AABB border				// entity with ghost in this border should transfer to this cell
+			Entity
+				outer.PlayerData data	// data used in client
+				PID connPID				// connPID of connection
+		msg----------------------------------
+			AuthReq
+				string account
+			AuthReq
+				string account
+			EnterSceneReq		// load player in the cell
+				int id		// userid
+				// create entity
+			ExitSceneReq		// save player in the cell
+				int id		// userid
+				// delete entity
+			SwitchCellReq // transfer entity to other cell
+				Entity entity
+				// sender delete entity and start forward msg to target cell
+				// recver create entity
+			SwitchCellRep // transfer entity to other cell
+				// recver stop forward msg to target cell
+actor
+	AuthActor
+		OnAuth(account string) (id int32)
+	AgentActor
+		OnLogin(account string)
+			id = auth(account)
+			data = load(id)
+			pid = getcell(data)
+			pid.Tell(enter{data})
+		OnDisconnected
+		OnSEnterCell
+		OnSLeaveCell
+		OnSAdd
+		OnSRemove
+		OnSUpdate
+	SceneActor
+		OnEnterScene
+		OnExitScene
+	CellActor
+		OnCUpdate()
+		OnSwitchCell(data PlayerData)
+			add(data)
+		onOutofBorder(data PlayerData)
+			remove(data)
+			pid = getCell(data)
+			pid.Tell(Transfer{data}}
+			
+

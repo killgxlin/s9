@@ -27,7 +27,7 @@ public class Util
 
 		return stub;
 	}
-	static public Msg.Vector3 GetInput() {
+	static public Msg.Vector2 GetInput() {
 		var dir = Vector3.zero;
 		if (Input.GetKey (KeyCode.A)) {
 			dir.x = -1;
@@ -44,6 +44,6 @@ public class Util
 		if (dir != Vector3.zero)
 			dir.Normalize ();
 		
-		return new Msg.Vector3{ X = dir.x, Y = dir.y, Z = dir.z };
+		return new Msg.Vector2{ X = dir.x, Y = dir.z };
 	}
 }

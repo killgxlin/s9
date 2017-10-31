@@ -3,5 +3,5 @@
 #export PROTOPATH2=../
 
 cd `dirname $0`
-protoc3 -I=. -I=$GOPATH/src/github.com/gogo/protobuf/protobuf -I=$GOPATH/src --csharp_out=../cscode/Client/Assets/pb3net/ --gogoslick_out=plugins=grpc:. protos.proto 
+protoc3 -I=. -I=$GOPATH/src/github.com/gogo/protobuf/protobuf -I=$GOPATH/src --csharp_out=../cscode/Client/Assets/pb3net/ --gogoslick_out=plugins=grpc:. msg.proto 
 cd -

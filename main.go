@@ -2,10 +2,16 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"gamelib/base/net/util"
 	"log"
-	_ "s9/actor/cell"
 	"s9/actor/gate"
+	"s9/imsg"
+	"s9/msg"
+
+	_ "s9/actor/auth"
+	_ "s9/actor/cell"
+	_ "s9/actor/scene"
 
 	console "github.com/AsynkronIT/goconsole"
 	"github.com/AsynkronIT/protoactor-go/cluster"
@@ -17,9 +23,23 @@ var (
 	gport = flag.Int("gport", 9000, "gate port")
 )
 
+func testA() {
+	for x := -10; x < 10; x++ {
+		v := &msg.Vector2{float32(x), 0}
+		name := imsg.GetCellName(v)
+		c := imsg.GetCellByName(name)
+		fmt.Println(v, name, c)
+	}
+	return
+}
+func testB() {
+	for x := -10; x < 10; x++ {
+		fmt.Println(x, x/3, x%3)
+	}
+	return
+}
+
 func main() {
-	log.SetFlags(log.LstdFlags | log.Lshortfile | log.Lmicroseconds)
-	flag.Parse()
 
 	// consul
 	cp, e := consul.New()

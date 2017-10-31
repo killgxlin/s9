@@ -125,7 +125,3 @@ actor
 			cellPID.Tell(m)
 			
 			
-milestones
-	add imsg and msg
-	change cell
-	switch
