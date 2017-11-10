@@ -11,9 +11,10 @@ public class Game {
 		Instance = this;
 
 		handler.SetHandler (this);
-		//conn.Connect ("10.235.226.80", 9000);
-		conn.Connect ("192.168.31.233", 9000);
+		conn.Connect ("10.235.226.106", 9000);
+		//conn.Connect ("192.168.0.106", 9000);
 		cam = Util.AttachStub ("Main Camera");
+
 	}
 		
 	public void Update (Main main, float deltaTime) {
@@ -77,7 +78,7 @@ public class Game {
 	Pb3Net.NetState lastSt = Pb3Net.NetState.Connecting;
 	void updateMessage() {
 		if (lastSt == Pb3Net.NetState.Connecting && conn.netState == Pb3Net.NetState.Connected) {
-			conn.SendMessage (new Msg.CLogin{Account="hello"});
+			conn.SendMessage (new Msg.CLogin{Account="doit"});
 		}
 		lastSt = conn.netState;
 		var msgs = conn.RecvMessage (100);
@@ -94,7 +95,7 @@ public class Game {
 		self = new PlayerData{ data = m.Self, stub = stub };
 		players.Add (m.Self.Id, self);
 
-		var cell = Util.CreateCell (m.Cell);
+		var cell = Util.CreateCell (m);
 		cells.Add (cell.name, cell);
 	}
 	void On(object ctx, Msg.SLeaveCell m) {

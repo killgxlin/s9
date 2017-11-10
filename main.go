@@ -38,6 +38,14 @@ func testB() {
 	return
 }
 
+func testC() {
+	ret := msg.GenNeighbours("cell_0_0")
+	for _, n := range ret {
+		fmt.Println(n)
+	}
+	fmt.Println(msg.GetCellByName("cell_0_0"))
+}
+
 func main() {
 
 	// consul

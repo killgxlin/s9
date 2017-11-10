@@ -2,6 +2,7 @@ package scene
 
 import (
 	"gamelib/actor/plugin/timer"
+	"gamelib/base/util"
 	"s9/imsg"
 	"s9/msg"
 	"time"
@@ -21,12 +22,14 @@ type sceneActor struct {
 }
 
 func (s *sceneActor) Receive(ctx actor.Context) {
+
 	switch m := ctx.Message().(type) {
 	case *actor.Started:
 		s.playerDatas = map[int32]*msg.PlayerData{}
 	case *actor.Stopping, *actor.Restarting:
 	case timer.TimerEvent:
 	case *imsg.EnterSceneReq:
+		m = util.Clone(m).(*imsg.EnterSceneReq)
 		data, ok := s.playerDatas[m.Id]
 		if !ok {
 			data = &msg.PlayerData{
@@ -46,6 +49,7 @@ func (s *sceneActor) Receive(ctx actor.Context) {
 				},
 			})
 	case *imsg.ExitSceneReq:
+		m = util.Clone(m).(*imsg.ExitSceneReq)
 		s.playerDatas[m.Id] = m.Entity.Data
 	}
 }

@@ -16,6 +16,8 @@
 		SwitchCellRep
 		AuthReq
 		AuthRep
+		SyncGhost
+		RemoveGhost
 */
 package imsg
 
@@ -44,6 +46,8 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 type Entity struct {
 	Data     *msg.PlayerData `protobuf:"bytes,1,opt,name=data" json:"data,omitempty"`
 	AgentPID *actor.PID      `protobuf:"bytes,2,opt,name=agentPID" json:"agentPID,omitempty"`
+	CellPID  *actor.PID      `protobuf:"bytes,3,opt,name=cellPID" json:"cellPID,omitempty"`
+	LastPos  *msg.Vector2    `protobuf:"bytes,4,opt,name=lastPos" json:"lastPos,omitempty"`
 }
 
 func (m *Entity) Reset()                    { *m = Entity{} }
@@ -60,6 +64,20 @@ func (m *Entity) GetData() *msg.PlayerData {
 func (m *Entity) GetAgentPID() *actor.PID {
 	if m != nil {
 		return m.AgentPID
+	}
+	return nil
+}
+
+func (m *Entity) GetCellPID() *actor.PID {
+	if m != nil {
+		return m.CellPID
+	}
+	return nil
+}
+
+func (m *Entity) GetLastPos() *msg.Vector2 {
+	if m != nil {
+		return m.LastPos
 	}
 	return nil
 }
@@ -162,6 +180,36 @@ func (m *AuthRep) GetId() int32 {
 	return 0
 }
 
+type SyncGhost struct {
+	Entity *Entity `protobuf:"bytes,1,opt,name=entity" json:"entity,omitempty"`
+}
+
+func (m *SyncGhost) Reset()                    { *m = SyncGhost{} }
+func (*SyncGhost) ProtoMessage()               {}
+func (*SyncGhost) Descriptor() ([]byte, []int) { return fileDescriptorImsg, []int{7} }
+
+func (m *SyncGhost) GetEntity() *Entity {
+	if m != nil {
+		return m.Entity
+	}
+	return nil
+}
+
+type RemoveGhost struct {
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *RemoveGhost) Reset()                    { *m = RemoveGhost{} }
+func (*RemoveGhost) ProtoMessage()               {}
+func (*RemoveGhost) Descriptor() ([]byte, []int) { return fileDescriptorImsg, []int{8} }
+
+func (m *RemoveGhost) GetId() int32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*Entity)(nil), "imsg.Entity")
 	proto.RegisterType((*EnterSceneReq)(nil), "imsg.EnterSceneReq")
@@ -170,6 +218,8 @@ func init() {
 	proto.RegisterType((*SwitchCellRep)(nil), "imsg.SwitchCellRep")
 	proto.RegisterType((*AuthReq)(nil), "imsg.AuthReq")
 	proto.RegisterType((*AuthRep)(nil), "imsg.AuthRep")
+	proto.RegisterType((*SyncGhost)(nil), "imsg.SyncGhost")
+	proto.RegisterType((*RemoveGhost)(nil), "imsg.RemoveGhost")
 }
 func (this *Entity) Equal(that interface{}) bool {
 	if that == nil {
@@ -200,6 +250,12 @@ func (this *Entity) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AgentPID.Equal(that1.AgentPID) {
+		return false
+	}
+	if !this.CellPID.Equal(that1.CellPID) {
+		return false
+	}
+	if !this.LastPos.Equal(that1.LastPos) {
 		return false
 	}
 	return true
@@ -387,17 +443,83 @@ func (this *AuthRep) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *SyncGhost) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*SyncGhost)
+	if !ok {
+		that2, ok := that.(SyncGhost)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if !this.Entity.Equal(that1.Entity) {
+		return false
+	}
+	return true
+}
+func (this *RemoveGhost) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*RemoveGhost)
+	if !ok {
+		that2, ok := that.(RemoveGhost)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Id != that1.Id {
+		return false
+	}
+	return true
+}
 func (this *Entity) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 8)
 	s = append(s, "&imsg.Entity{")
 	if this.Data != nil {
 		s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
 	}
 	if this.AgentPID != nil {
 		s = append(s, "AgentPID: "+fmt.Sprintf("%#v", this.AgentPID)+",\n")
+	}
+	if this.CellPID != nil {
+		s = append(s, "CellPID: "+fmt.Sprintf("%#v", this.CellPID)+",\n")
+	}
+	if this.LastPos != nil {
+		s = append(s, "LastPos: "+fmt.Sprintf("%#v", this.LastPos)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -467,6 +589,28 @@ func (this *AuthRep) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *SyncGhost) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&imsg.SyncGhost{")
+	if this.Entity != nil {
+		s = append(s, "Entity: "+fmt.Sprintf("%#v", this.Entity)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RemoveGhost) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&imsg.RemoveGhost{")
+	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringImsg(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -509,6 +653,26 @@ func (m *Entity) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += n2
+	}
+	if m.CellPID != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintImsg(dAtA, i, uint64(m.CellPID.Size()))
+		n3, err := m.CellPID.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if m.LastPos != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintImsg(dAtA, i, uint64(m.LastPos.Size()))
+		n4, err := m.LastPos.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
 	}
 	return i, nil
 }
@@ -560,11 +724,11 @@ func (m *ExitSceneReq) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintImsg(dAtA, i, uint64(m.Entity.Size()))
-		n3, err := m.Entity.MarshalTo(dAtA[i:])
+		n5, err := m.Entity.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n5
 	}
 	return i, nil
 }
@@ -588,11 +752,11 @@ func (m *SwitchCellReq) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintImsg(dAtA, i, uint64(m.Entity.Size()))
-		n4, err := m.Entity.MarshalTo(dAtA[i:])
+		n6, err := m.Entity.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n6
 	}
 	return i, nil
 }
@@ -667,6 +831,57 @@ func (m *AuthRep) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *SyncGhost) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SyncGhost) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Entity != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintImsg(dAtA, i, uint64(m.Entity.Size()))
+		n7, err := m.Entity.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
+	}
+	return i, nil
+}
+
+func (m *RemoveGhost) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RemoveGhost) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintImsg(dAtA, i, uint64(m.Id))
+	}
+	return i, nil
+}
+
 func encodeFixed64Imsg(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	dAtA[offset+1] = uint8(v >> 8)
@@ -703,6 +918,14 @@ func (m *Entity) Size() (n int) {
 	}
 	if m.AgentPID != nil {
 		l = m.AgentPID.Size()
+		n += 1 + l + sovImsg(uint64(l))
+	}
+	if m.CellPID != nil {
+		l = m.CellPID.Size()
+		n += 1 + l + sovImsg(uint64(l))
+	}
+	if m.LastPos != nil {
+		l = m.LastPos.Size()
 		n += 1 + l + sovImsg(uint64(l))
 	}
 	return n
@@ -768,6 +991,25 @@ func (m *AuthRep) Size() (n int) {
 	return n
 }
 
+func (m *SyncGhost) Size() (n int) {
+	var l int
+	_ = l
+	if m.Entity != nil {
+		l = m.Entity.Size()
+		n += 1 + l + sovImsg(uint64(l))
+	}
+	return n
+}
+
+func (m *RemoveGhost) Size() (n int) {
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovImsg(uint64(m.Id))
+	}
+	return n
+}
+
 func sovImsg(x uint64) (n int) {
 	for {
 		n++
@@ -788,6 +1030,8 @@ func (this *Entity) String() string {
 	s := strings.Join([]string{`&Entity{`,
 		`Data:` + strings.Replace(fmt.Sprintf("%v", this.Data), "PlayerData", "msg.PlayerData", 1) + `,`,
 		`AgentPID:` + strings.Replace(fmt.Sprintf("%v", this.AgentPID), "PID", "actor.PID", 1) + `,`,
+		`CellPID:` + strings.Replace(fmt.Sprintf("%v", this.CellPID), "PID", "actor.PID", 1) + `,`,
+		`LastPos:` + strings.Replace(fmt.Sprintf("%v", this.LastPos), "Vector2", "msg.Vector2", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -848,6 +1092,26 @@ func (this *AuthRep) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AuthRep{`,
+		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SyncGhost) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SyncGhost{`,
+		`Entity:` + strings.Replace(fmt.Sprintf("%v", this.Entity), "Entity", "Entity", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RemoveGhost) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RemoveGhost{`,
 		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
 		`}`,
 	}, "")
@@ -953,6 +1217,72 @@ func (m *Entity) Unmarshal(dAtA []byte) error {
 				m.AgentPID = &actor.PID{}
 			}
 			if err := m.AgentPID.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CellPID", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthImsg
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CellPID == nil {
+				m.CellPID = &actor.PID{}
+			}
+			if err := m.CellPID.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastPos", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthImsg
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LastPos == nil {
+				m.LastPos = &msg.Vector2{}
+			}
+			if err := m.LastPos.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1448,6 +1778,158 @@ func (m *AuthRep) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *SyncGhost) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowImsg
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SyncGhost: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SyncGhost: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entity", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthImsg
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Entity == nil {
+				m.Entity = &Entity{}
+			}
+			if err := m.Entity.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipImsg(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthImsg
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RemoveGhost) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowImsg
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RemoveGhost: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RemoveGhost: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowImsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipImsg(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthImsg
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipImsg(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1556,26 +2038,30 @@ var (
 func init() { proto.RegisterFile("imsg.proto", fileDescriptorImsg) }
 
 var fileDescriptorImsg = []byte{
-	// 330 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x7c, 0x91, 0xb1, 0x4e, 0x02, 0x41,
-	0x10, 0x86, 0x6f, 0x09, 0x82, 0x8e, 0xa0, 0xe6, 0x2a, 0xa4, 0x58, 0xcc, 0x61, 0x8c, 0x85, 0xde,
-	0x25, 0x1a, 0x4d, 0x2c, 0xd1, 0xa3, 0xa0, 0x23, 0x87, 0x3e, 0xc0, 0x72, 0x6c, 0x8e, 0x8d, 0xb0,
-	0x8b, 0x77, 0x43, 0x94, 0xce, 0x47, 0xf0, 0x31, 0x7c, 0x14, 0x4b, 0x4a, 0x4b, 0x59, 0x1b, 0x4b,
-	0x1e, 0xc1, 0xdc, 0x1e, 0x60, 0x0c, 0xd1, 0x6e, 0x76, 0xbe, 0xf9, 0xbf, 0x9d, 0xec, 0x02, 0x88,
-	0x61, 0x12, 0xb9, 0xa3, 0x58, 0xa1, 0xb2, 0xf3, 0x69, 0x5d, 0xdd, 0x4b, 0xae, 0xbc, 0x61, 0x12,
-	0x79, 0xab, 0x7e, 0xf5, 0x32, 0x12, 0xd8, 0x1f, 0x77, 0xdd, 0x50, 0x0d, 0xbd, 0x46, 0x32, 0x91,
-	0xf7, 0xb1, 0x92, 0xad, 0x5b, 0xcf, 0x40, 0x16, 0xa2, 0x8a, 0x4f, 0x23, 0xe5, 0x99, 0x22, 0xeb,
-	0x25, 0x59, 0xce, 0xb9, 0x83, 0x42, 0x53, 0xa2, 0xc0, 0x89, 0x5d, 0x87, 0x7c, 0x8f, 0x21, 0xab,
-	0x90, 0x03, 0x72, 0xbc, 0x7d, 0xb6, 0xeb, 0xa6, 0xee, 0xf6, 0x80, 0x4d, 0x78, 0xec, 0x33, 0x64,
-	0x81, 0x81, 0xf6, 0x11, 0x6c, 0xb2, 0x88, 0x4b, 0x6c, 0xb7, 0xfc, 0x4a, 0xce, 0x0c, 0x82, 0x6b,
-	0xac, 0x6e, 0xbb, 0xe5, 0x07, 0x2b, 0xe6, 0xd4, 0xa0, 0xdc, 0x94, 0xc8, 0xe3, 0x4e, 0xc8, 0x25,
-	0x0f, 0xf8, 0x83, 0xbd, 0x03, 0x39, 0xd1, 0x33, 0xee, 0x8d, 0x20, 0x27, 0x7a, 0x8e, 0x0f, 0xa5,
-	0xe6, 0x93, 0xc0, 0xbf, 0xb8, 0x7d, 0x08, 0x05, 0x6e, 0xf6, 0x5a, 0x5c, 0x53, 0x72, 0xcd, 0x23,
-	0x64, 0xbb, 0x06, 0x0b, 0xe6, 0x5c, 0x40, 0xb9, 0xf3, 0x28, 0x30, 0xec, 0xdf, 0xf0, 0xc1, 0x20,
-	0xd5, 0xfc, 0xc4, 0xc8, 0x3f, 0xb1, 0xda, 0xef, 0xd8, 0x68, 0x6d, 0xbb, 0x3a, 0x14, 0x1b, 0x63,
-	0xec, 0xa7, 0xc6, 0x0a, 0x14, 0x59, 0x18, 0xaa, 0xb1, 0x44, 0xc3, 0xb7, 0x82, 0xe5, 0xd1, 0xd9,
-	0x5f, 0x0e, 0xad, 0xe5, 0xaf, 0x4f, 0xa6, 0x33, 0x6a, 0xbd, 0xcf, 0xa8, 0x35, 0x9f, 0x51, 0xf2,
-	0xac, 0x29, 0x79, 0xd5, 0x94, 0xbc, 0x69, 0x4a, 0xa6, 0x9a, 0x92, 0x0f, 0x4d, 0xc9, 0x97, 0xa6,
-	0xd6, 0x5c, 0x53, 0xf2, 0xf2, 0x49, 0xad, 0x6e, 0xc1, 0x7c, 0xc5, 0xf9, 0x77, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xfd, 0xf9, 0x06, 0xe1, 0xe8, 0x01, 0x00, 0x00,
+	// 393 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x8c, 0x92, 0xc1, 0xae, 0x93, 0x40,
+	0x14, 0x86, 0x99, 0x5a, 0x8b, 0xf7, 0xdc, 0x5e, 0x35, 0xac, 0xf0, 0x26, 0x4e, 0x0d, 0x6d, 0x1a,
+	0x17, 0x0a, 0xb1, 0x46, 0x13, 0x97, 0x55, 0x1a, 0xd3, 0x1d, 0x99, 0x1a, 0xf7, 0xd3, 0xe9, 0x04,
+	0x88, 0x30, 0x53, 0x99, 0xa9, 0xca, 0xce, 0x47, 0xf0, 0x1d, 0xdc, 0xf8, 0x28, 0x2e, 0xbb, 0x74,
+	0x69, 0x71, 0xe3, 0xb2, 0x8f, 0x60, 0x18, 0x4a, 0x8d, 0x36, 0x9a, 0xbb, 0x3b, 0x9c, 0xef, 0xff,
+	0x7f, 0xfe, 0x43, 0x00, 0x48, 0x73, 0x15, 0xfb, 0xeb, 0x42, 0x6a, 0xe9, 0x74, 0xeb, 0xf9, 0xf2,
+	0xb6, 0x7a, 0x16, 0xe4, 0x2a, 0x0e, 0x8e, 0xfb, 0xcb, 0xa7, 0x71, 0xaa, 0x93, 0xcd, 0xd2, 0x67,
+	0x32, 0x0f, 0xa6, 0xaa, 0x14, 0x6f, 0x0a, 0x29, 0xe6, 0xaf, 0x02, 0x03, 0x29, 0xd3, 0xb2, 0x78,
+	0x18, 0xcb, 0xc0, 0x0c, 0xcd, 0x4e, 0x35, 0x3e, 0xef, 0x33, 0x82, 0xde, 0x4c, 0xe8, 0x54, 0x97,
+	0xce, 0x10, 0xba, 0x2b, 0xaa, 0xa9, 0x8b, 0xee, 0xa1, 0xfb, 0xe7, 0x93, 0x5b, 0x7e, 0x1d, 0x1e,
+	0x65, 0xb4, 0xe4, 0x45, 0x48, 0x35, 0x25, 0x06, 0x3a, 0x63, 0xb8, 0x41, 0x63, 0x2e, 0x74, 0x34,
+	0x0f, 0xdd, 0x8e, 0x11, 0x82, 0x6f, 0x62, 0xfd, 0x68, 0x1e, 0x92, 0x23, 0x73, 0x46, 0x60, 0x33,
+	0x9e, 0x65, 0xb5, 0xec, 0xda, 0x89, 0xac, 0x45, 0xce, 0x18, 0xec, 0x8c, 0x2a, 0x1d, 0x49, 0xe5,
+	0x76, 0x8d, 0xaa, 0x6f, 0xde, 0xfa, 0x9a, 0xd7, 0xd2, 0x09, 0x69, 0xa1, 0x37, 0x80, 0x8b, 0x99,
+	0xd0, 0xbc, 0x58, 0x30, 0x2e, 0x38, 0xe1, 0x6f, 0x9d, 0x9b, 0xd0, 0x49, 0x57, 0xa6, 0xe9, 0x75,
+	0xd2, 0x49, 0x57, 0x5e, 0x08, 0xfd, 0xd9, 0x87, 0x54, 0xff, 0x8b, 0x3b, 0x23, 0xe8, 0x71, 0x73,
+	0xe5, 0xa1, 0x74, 0xdf, 0x37, 0xdf, 0xb4, 0xb9, 0x9c, 0x1c, 0x98, 0xf7, 0x04, 0x2e, 0x16, 0xef,
+	0x53, 0xcd, 0x92, 0x17, 0x3c, 0xcb, 0xea, 0x98, 0xdf, 0x36, 0xf4, 0x1f, 0xdb, 0xe0, 0x4f, 0xdb,
+	0xfa, 0xa4, 0xdd, 0x10, 0xec, 0xe9, 0x46, 0x27, 0x75, 0xa2, 0x0b, 0x36, 0x65, 0x4c, 0x6e, 0x84,
+	0x36, 0xfc, 0x8c, 0xb4, 0x8f, 0xde, 0x9d, 0x56, 0x74, 0xea, 0x7f, 0x04, 0x67, 0x8b, 0x52, 0xb0,
+	0x97, 0x89, 0x54, 0xfa, 0x8a, 0x9d, 0xee, 0xc2, 0x39, 0xe1, 0xb9, 0x7c, 0xc7, 0x1b, 0xd3, 0x5f,
+	0x89, 0xcf, 0x1f, 0x6c, 0x77, 0xd8, 0xfa, 0xb6, 0xc3, 0xd6, 0x7e, 0x87, 0xd1, 0xc7, 0x0a, 0xa3,
+	0x2f, 0x15, 0x46, 0x5f, 0x2b, 0x8c, 0xb6, 0x15, 0x46, 0xdf, 0x2b, 0x8c, 0x7e, 0x56, 0xd8, 0xda,
+	0x57, 0x18, 0x7d, 0xfa, 0x81, 0xad, 0x65, 0xcf, 0xfc, 0x2b, 0x8f, 0x7f, 0x05, 0x00, 0x00, 0xff,
+	0xff, 0x0f, 0x28, 0x6c, 0x44, 0x89, 0x02, 0x00, 0x00,
 }

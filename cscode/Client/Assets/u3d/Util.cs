@@ -27,10 +27,10 @@ public class Util
 
 		return stub;
 	}
-	static public CellStub CreateCell(Msg.Cell cell) {
-		var obj = new GameObject (cell.Name);
+	static public CellStub CreateCell(Msg.SEnterCell m) {
+		var obj = new GameObject (m.Cell.Name);
 		var stub = obj.AddComponent<CellStub>();
-		stub.Init (cell);
+		stub.Init (m);
 		return stub;
 	}
 
@@ -50,7 +50,30 @@ public class Util
 		}
 		if (dir != Vector3.zero)
 			dir.Normalize ();
+
+		//dir.Scale (new Vector3 (0.5f, 0.5f, 0.5f));
 		
 		return new Msg.Vector2{ X = dir.x, Y = dir.z };
+	}
+
+	static public void AddBorder(GameObject gameObject, Msg.AABB box, Color color) {
+		var g2 = new GameObject ();
+		var r = g2.AddComponent<LineRenderer> ();
+		g2.transform.SetParent (gameObject.transform);
+		var poses = new Vector3[] {
+			new Vector3 (box.Minx, 0, box.Miny),
+			new Vector3 (box.Minx, 0, box.Maxy),
+			new Vector3 (box.Maxx, 0, box.Maxy),
+			new Vector3 (box.Maxx, 0, box.Miny),
+			new Vector3 (box.Minx, 0, box.Miny),
+		};
+
+		r.numPositions = poses.Length;
+		r.SetPositions (poses);
+		r.startWidth = 0.1f;
+		r.endWidth = 0.1f;
+		var mat = new Material (Shader.Find ("Legacy Shaders/Diffuse"));
+		mat.color = color;
+		r.material = mat;
 	}
 }

@@ -6,6 +6,8 @@ import "github.com/AsynkronIT/protoactor-go/actor/protos.proto";
 message Entity {
 	msg.PlayerData data = 1;
 	actor.PID agentPID = 2;
+	actor.PID cellPID = 3;
+	msg.Vector2 lastPos = 4;
 }
 
 message EnterSceneReq {
@@ -32,3 +34,12 @@ message AuthReq {
 message AuthRep {
 	int32 id = 1;
 }
+
+message SyncGhost {
+	Entity entity = 1;
+}
+
+message RemoveGhost {
+	int32 id = 1;
+}
+

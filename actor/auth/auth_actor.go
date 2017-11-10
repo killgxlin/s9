@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"gamelib/base/util"
 	"s9/imsg"
 	"time"
 
@@ -25,6 +26,7 @@ func (c *authActor) Receive(ctx actor.Context) {
 		c.accounts = map[string]int32{}
 	case *actor.Stopping, *actor.Restarting:
 	case *imsg.AuthReq:
+		m = util.Clone(m).(*imsg.AuthReq)
 		id, ok := c.accounts[m.Account]
 		if !ok {
 			c.idGen++

@@ -1,7 +1,6 @@
 package gate
 
 import (
-	"gamelib/actor/plugin/logger"
 	pnet "gamelib/actor/plugin/net"
 	"gamelib/base/util"
 	snet "net"
@@ -67,7 +66,7 @@ var (
 
 func startAgent(c *snet.TCPConn) *actor.Props {
 	return actor.FromInstance(&agentActor{}).WithMiddleware(
-		logger.MsgLogger,
+		//logger.MsgLogger,
 		plugin.Use(pnet.NewConnection(c, msgio, true, true, -1)),
 	)
 }

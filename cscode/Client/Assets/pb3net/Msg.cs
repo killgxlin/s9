@@ -24,27 +24,28 @@ namespace Msg {
           string.Concat(
             "Cgltc2cucHJvdG8SA21zZyIfCgdWZWN0b3IyEgkKAXgYASABKAISCQoBeRgC",
             "IAEoAiI+CgRBQUJCEgwKBG1pbngYASABKAISDAoEbWF4eBgCIAEoAhIMCgRt",
-            "aW55GAMgASgCEgwKBG1heHkYBCABKAIiUQoEQ2VsbBIMCgRuYW1lGAEgASgJ",
+            "aW55GAMgASgCEgwKBG1heHkYBCABKAIicwoEQ2VsbBIMCgRuYW1lGAEgASgJ",
             "EhkKBmJvcmRlchgCIAEoCzIJLm1zZy5BQUJCEiAKDXN3aXRjaF9ib3JkZXIY",
-            "AyABKAsyCS5tc2cuQUFCQiJOCgpQbGF5ZXJEYXRhEgoKAmlkGAEgASgFEhkK",
-            "A3BvcxgCIAEoCzIMLm1zZy5WZWN0b3IyEhkKA3ZlbBgDIAEoCzIMLm1zZy5W",
-            "ZWN0b3IyIhkKBkNMb2dpbhIPCgdhY2NvdW50GAEgASgJIigKB0NVcGRhdGUS",
-            "HQoEZGF0YRgBIAEoCzIPLm1zZy5QbGF5ZXJEYXRhIkQKClNFbnRlckNlbGwS",
-            "HQoEc2VsZhgBIAEoCzIPLm1zZy5QbGF5ZXJEYXRhEhcKBGNlbGwYAiABKAsy",
-            "CS5tc2cuQ2VsbCIfCgpTTGVhdmVDZWxsEhEKCWNlbGxfbmFtZRgBIAEoCSIl",
-            "CgRTQWRkEh0KBGRhdGEYASADKAsyDy5tc2cuUGxheWVyRGF0YSIVCgdTUmVt",
-            "b3ZlEgoKAmlkGAEgAygFIigKB1NVcGRhdGUSHQoEZGF0YRgBIAEoCzIPLm1z",
-            "Zy5QbGF5ZXJEYXRhYgZwcm90bzM="));
+            "AyABKAsyCS5tc2cuQUFCQhIgCg1taXJyb3JfYm9yZGVyGAQgASgLMgkubXNn",
+            "LkFBQkIiTgoKUGxheWVyRGF0YRIKCgJpZBgBIAEoBRIZCgNwb3MYAiABKAsy",
+            "DC5tc2cuVmVjdG9yMhIZCgN2ZWwYAyABKAsyDC5tc2cuVmVjdG9yMiIZCgZD",
+            "TG9naW4SDwoHYWNjb3VudBgBIAEoCSIoCgdDVXBkYXRlEh0KBGRhdGEYASAB",
+            "KAsyDy5tc2cuUGxheWVyRGF0YSJhCgpTRW50ZXJDZWxsEh0KBHNlbGYYASAB",
+            "KAsyDy5tc2cuUGxheWVyRGF0YRIXCgRjZWxsGAIgASgLMgkubXNnLkNlbGwS",
+            "GwoIbmVpZ2hib3IYAyADKAsyCS5tc2cuQ2VsbCIfCgpTTGVhdmVDZWxsEhEK",
+            "CWNlbGxfbmFtZRgBIAEoCSIlCgRTQWRkEh0KBGRhdGEYASADKAsyDy5tc2cu",
+            "UGxheWVyRGF0YSIVCgdTUmVtb3ZlEgoKAmlkGAEgAygFIigKB1NVcGRhdGUS",
+            "HQoEZGF0YRgBIAEoCzIPLm1zZy5QbGF5ZXJEYXRhYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.Vector2), global::Msg.Vector2.Parser, new[]{ "X", "Y" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.AABB), global::Msg.AABB.Parser, new[]{ "Minx", "Maxx", "Miny", "Maxy" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.Cell), global::Msg.Cell.Parser, new[]{ "Name", "Border", "SwitchBorder" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.Cell), global::Msg.Cell.Parser, new[]{ "Name", "Border", "SwitchBorder", "MirrorBorder" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.PlayerData), global::Msg.PlayerData.Parser, new[]{ "Id", "Pos", "Vel" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.CLogin), global::Msg.CLogin.Parser, new[]{ "Account" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.CUpdate), global::Msg.CUpdate.Parser, new[]{ "Data" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SEnterCell), global::Msg.SEnterCell.Parser, new[]{ "Self", "Cell" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SEnterCell), global::Msg.SEnterCell.Parser, new[]{ "Self", "Cell", "Neighbor" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SLeaveCell), global::Msg.SLeaveCell.Parser, new[]{ "CellName" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SAdd), global::Msg.SAdd.Parser, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SRemove), global::Msg.SRemove.Parser, new[]{ "Id" }, null, null, null),
@@ -428,6 +429,7 @@ namespace Msg {
       name_ = other.name_;
       Border = other.border_ != null ? other.Border.Clone() : null;
       SwitchBorder = other.switchBorder_ != null ? other.SwitchBorder.Clone() : null;
+      MirrorBorder = other.mirrorBorder_ != null ? other.MirrorBorder.Clone() : null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -468,6 +470,17 @@ namespace Msg {
       }
     }
 
+    /// <summary>Field number for the "mirror_border" field.</summary>
+    public const int MirrorBorderFieldNumber = 4;
+    private global::Msg.AABB mirrorBorder_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Msg.AABB MirrorBorder {
+      get { return mirrorBorder_; }
+      set {
+        mirrorBorder_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as Cell);
@@ -484,6 +497,7 @@ namespace Msg {
       if (Name != other.Name) return false;
       if (!object.Equals(Border, other.Border)) return false;
       if (!object.Equals(SwitchBorder, other.SwitchBorder)) return false;
+      if (!object.Equals(MirrorBorder, other.MirrorBorder)) return false;
       return true;
     }
 
@@ -493,6 +507,7 @@ namespace Msg {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (border_ != null) hash ^= Border.GetHashCode();
       if (switchBorder_ != null) hash ^= SwitchBorder.GetHashCode();
+      if (mirrorBorder_ != null) hash ^= MirrorBorder.GetHashCode();
       return hash;
     }
 
@@ -515,6 +530,10 @@ namespace Msg {
         output.WriteRawTag(26);
         output.WriteMessage(SwitchBorder);
       }
+      if (mirrorBorder_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(MirrorBorder);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -528,6 +547,9 @@ namespace Msg {
       }
       if (switchBorder_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(SwitchBorder);
+      }
+      if (mirrorBorder_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MirrorBorder);
       }
       return size;
     }
@@ -551,6 +573,12 @@ namespace Msg {
           switchBorder_ = new global::Msg.AABB();
         }
         SwitchBorder.MergeFrom(other.SwitchBorder);
+      }
+      if (other.mirrorBorder_ != null) {
+        if (mirrorBorder_ == null) {
+          mirrorBorder_ = new global::Msg.AABB();
+        }
+        MirrorBorder.MergeFrom(other.MirrorBorder);
       }
     }
 
@@ -578,6 +606,13 @@ namespace Msg {
               switchBorder_ = new global::Msg.AABB();
             }
             input.ReadMessage(switchBorder_);
+            break;
+          }
+          case 34: {
+            if (mirrorBorder_ == null) {
+              mirrorBorder_ = new global::Msg.AABB();
+            }
+            input.ReadMessage(mirrorBorder_);
             break;
           }
         }
@@ -1037,6 +1072,7 @@ namespace Msg {
     public SEnterCell(SEnterCell other) : this() {
       Self = other.self_ != null ? other.Self.Clone() : null;
       Cell = other.cell_ != null ? other.Cell.Clone() : null;
+      neighbor_ = other.neighbor_.Clone();
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1066,6 +1102,16 @@ namespace Msg {
       }
     }
 
+    /// <summary>Field number for the "neighbor" field.</summary>
+    public const int NeighborFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::Msg.Cell> _repeated_neighbor_codec
+        = pb::FieldCodec.ForMessage(26, global::Msg.Cell.Parser);
+    private readonly pbc::RepeatedField<global::Msg.Cell> neighbor_ = new pbc::RepeatedField<global::Msg.Cell>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Msg.Cell> Neighbor {
+      get { return neighbor_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SEnterCell);
@@ -1081,6 +1127,7 @@ namespace Msg {
       }
       if (!object.Equals(Self, other.Self)) return false;
       if (!object.Equals(Cell, other.Cell)) return false;
+      if(!neighbor_.Equals(other.neighbor_)) return false;
       return true;
     }
 
@@ -1089,6 +1136,7 @@ namespace Msg {
       int hash = 1;
       if (self_ != null) hash ^= Self.GetHashCode();
       if (cell_ != null) hash ^= Cell.GetHashCode();
+      hash ^= neighbor_.GetHashCode();
       return hash;
     }
 
@@ -1107,6 +1155,7 @@ namespace Msg {
         output.WriteRawTag(18);
         output.WriteMessage(Cell);
       }
+      neighbor_.WriteTo(output, _repeated_neighbor_codec);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1118,6 +1167,7 @@ namespace Msg {
       if (cell_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Cell);
       }
+      size += neighbor_.CalculateSize(_repeated_neighbor_codec);
       return size;
     }
 
@@ -1138,6 +1188,7 @@ namespace Msg {
         }
         Cell.MergeFrom(other.Cell);
       }
+      neighbor_.Add(other.neighbor_);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1160,6 +1211,10 @@ namespace Msg {
               cell_ = new global::Msg.Cell();
             }
             input.ReadMessage(cell_);
+            break;
+          }
+          case 26: {
+            neighbor_.AddEntriesFrom(input, _repeated_neighbor_codec);
             break;
           }
         }

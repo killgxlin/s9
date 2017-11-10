@@ -18,6 +18,7 @@ message Cell {
 	string name = 1;
 	AABB border = 2;
 	AABB switch_border = 3;
+	AABB mirror_border = 4;
 }
 
 message PlayerData {
@@ -38,6 +39,7 @@ message CUpdate {
 message SEnterCell {
 	PlayerData self = 1;
 	Cell cell = 2;
+	repeated Cell neighbor = 3;
 }
 
 message SLeaveCell {

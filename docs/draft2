@@ -33,7 +33,7 @@ proto
 			Entity
 				outer.PlayerData data	// data used in client
 				PID connPID				// connPID of connection
-				PID entityPID			// PID of entity's cell, if not nil then i'm a ghost else i'm an entity
+				PID cellPID				// PID of entity's cell, if not nil then i'm a ghost else i'm an entity
 		msg----------------------------------
 			Auth
 				string account
