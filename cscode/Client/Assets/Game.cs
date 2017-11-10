@@ -80,7 +80,7 @@ public class Game {
 	Pb3Net.NetState lastSt = Pb3Net.NetState.Connecting;
 	void updateMessage() {
 		if (lastSt == Pb3Net.NetState.Connecting && conn.netState == Pb3Net.NetState.Connected) {
-			conn.SendMessage (new Msg.CLogin{Account="doit"});
+			conn.SendMessage (new Msg.CLogin{Account="killerg"});
 		}
 		lastSt = conn.netState;
 		var msgs = conn.RecvMessage (100);

@@ -233,7 +233,7 @@ func (c *cellActor) syncGhost(ctx actor.Context, entity *imsg.Entity) {
 }
 func (c *cellActor) removeGhost(ctx actor.Context, entity *imsg.Entity, spos *msg.Vector2) {
 	for _, c := range c.neighbors {
-		if c.InGhostBorder(spos) && !c.InGhostBorder(entity.Data.Pos) {
+		if c.InGhostBorder(spos) {
 			dstCellPID := msg.GetCellPIDByName(c.Name)
 			ctx.Request(dstCellPID, &imsg.RemoveGhost{entity.Data.Id})
 		}
@@ -248,7 +248,7 @@ func init() {
 	remote.Register("cell", actor.FromProducer(func() actor.Actor {
 		return &cellActor{}
 	}).WithMiddleware(
-		//logger.MsgLogger,
+		logger.MsgLogger,
 		plugin.Use(timer.NewTimer(heartbeatInterval)),
 	))
 }
