@@ -40,7 +40,7 @@ func (aa *agentActor) Receive(ctx actor.Context) {
 		pid, e = cluster.Get("scene", "scene")
 		util.PanicOnErr(e)
 		ctx.Request(pid, &imsg.EnterSceneReq{Id: arep.Id})
-	case *msg.CUpdate:
+	case *msg.CMove:
 		if aa.cellPID != nil {
 			ctx.Tell(aa.cellPID, m)
 		}

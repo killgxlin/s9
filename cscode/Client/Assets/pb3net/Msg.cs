@@ -29,13 +29,14 @@ namespace Msg {
             "AyABKAsyCS5tc2cuQUFCQhIgCg1taXJyb3JfYm9yZGVyGAQgASgLMgkubXNn",
             "LkFBQkIiTgoKUGxheWVyRGF0YRIKCgJpZBgBIAEoBRIZCgNwb3MYAiABKAsy",
             "DC5tc2cuVmVjdG9yMhIZCgN2ZWwYAyABKAsyDC5tc2cuVmVjdG9yMiIZCgZD",
-            "TG9naW4SDwoHYWNjb3VudBgBIAEoCSIoCgdDVXBkYXRlEh0KBGRhdGEYASAB",
-            "KAsyDy5tc2cuUGxheWVyRGF0YSJhCgpTRW50ZXJDZWxsEh0KBHNlbGYYASAB",
-            "KAsyDy5tc2cuUGxheWVyRGF0YRIXCgRjZWxsGAIgASgLMgkubXNnLkNlbGwS",
-            "GwoIbmVpZ2hib3IYAyADKAsyCS5tc2cuQ2VsbCIfCgpTTGVhdmVDZWxsEhEK",
-            "CWNlbGxfbmFtZRgBIAEoCSIlCgRTQWRkEh0KBGRhdGEYASADKAsyDy5tc2cu",
-            "UGxheWVyRGF0YSIVCgdTUmVtb3ZlEgoKAmlkGAEgAygFIigKB1NVcGRhdGUS",
-            "HQoEZGF0YRgBIAEoCzIPLm1zZy5QbGF5ZXJEYXRhYgZwcm90bzM="));
+            "TG9naW4SDwoHYWNjb3VudBgBIAEoCSJJCgVDTW92ZRIKCgJpZBgBIAEoBRIZ",
+            "CgNwb3MYAiABKAsyDC5tc2cuVmVjdG9yMhIZCgN2ZWwYAyABKAsyDC5tc2cu",
+            "VmVjdG9yMiJhCgpTRW50ZXJDZWxsEh0KBHNlbGYYASABKAsyDy5tc2cuUGxh",
+            "eWVyRGF0YRIXCgRjZWxsGAIgASgLMgkubXNnLkNlbGwSGwoIbmVpZ2hib3IY",
+            "AyADKAsyCS5tc2cuQ2VsbCIfCgpTTGVhdmVDZWxsEhEKCWNlbGxfbmFtZRgB",
+            "IAEoCSIlCgRTQWRkEh0KBGRhdGEYASADKAsyDy5tc2cuUGxheWVyRGF0YSIV",
+            "CgdTUmVtb3ZlEgoKAmlkGAEgAygFIigKB1NVcGRhdGUSHQoEZGF0YRgBIAEo",
+            "CzIPLm1zZy5QbGF5ZXJEYXRhYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -44,7 +45,7 @@ namespace Msg {
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.Cell), global::Msg.Cell.Parser, new[]{ "Name", "Border", "SwitchBorder", "MirrorBorder" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.PlayerData), global::Msg.PlayerData.Parser, new[]{ "Id", "Pos", "Vel" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.CLogin), global::Msg.CLogin.Parser, new[]{ "Account" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.CUpdate), global::Msg.CUpdate.Parser, new[]{ "Data" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Msg.CMove), global::Msg.CMove.Parser, new[]{ "Id", "Pos", "Vel" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SEnterCell), global::Msg.SEnterCell.Parser, new[]{ "Self", "Cell", "Neighbor" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SLeaveCell), global::Msg.SLeaveCell.Parser, new[]{ "CellName" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Msg.SAdd), global::Msg.SAdd.Parser, new[]{ "Data" }, null, null, null),
@@ -923,10 +924,10 @@ namespace Msg {
 
   }
 
-  public sealed partial class CUpdate : pb::IMessage<CUpdate> {
-    private static readonly pb::MessageParser<CUpdate> _parser = new pb::MessageParser<CUpdate>(() => new CUpdate());
+  public sealed partial class CMove : pb::IMessage<CMove> {
+    private static readonly pb::MessageParser<CMove> _parser = new pb::MessageParser<CMove>(() => new CMove());
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<CUpdate> Parser { get { return _parser; } }
+    public static pb::MessageParser<CMove> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -939,54 +940,82 @@ namespace Msg {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CUpdate() {
+    public CMove() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CUpdate(CUpdate other) : this() {
-      Data = other.data_ != null ? other.Data.Clone() : null;
+    public CMove(CMove other) : this() {
+      id_ = other.id_;
+      Pos = other.pos_ != null ? other.Pos.Clone() : null;
+      Vel = other.vel_ != null ? other.Vel.Clone() : null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CUpdate Clone() {
-      return new CUpdate(this);
+    public CMove Clone() {
+      return new CMove(this);
     }
 
-    /// <summary>Field number for the "data" field.</summary>
-    public const int DataFieldNumber = 1;
-    private global::Msg.PlayerData data_;
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private int id_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Msg.PlayerData Data {
-      get { return data_; }
+    public int Id {
+      get { return id_; }
       set {
-        data_ = value;
+        id_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "pos" field.</summary>
+    public const int PosFieldNumber = 2;
+    private global::Msg.Vector2 pos_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Msg.Vector2 Pos {
+      get { return pos_; }
+      set {
+        pos_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "vel" field.</summary>
+    public const int VelFieldNumber = 3;
+    private global::Msg.Vector2 vel_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Msg.Vector2 Vel {
+      get { return vel_; }
+      set {
+        vel_ = value;
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as CUpdate);
+      return Equals(other as CMove);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(CUpdate other) {
+    public bool Equals(CMove other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(Data, other.Data)) return false;
+      if (Id != other.Id) return false;
+      if (!object.Equals(Pos, other.Pos)) return false;
+      if (!object.Equals(Vel, other.Vel)) return false;
       return true;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (data_ != null) hash ^= Data.GetHashCode();
+      if (Id != 0) hash ^= Id.GetHashCode();
+      if (pos_ != null) hash ^= Pos.GetHashCode();
+      if (vel_ != null) hash ^= Vel.GetHashCode();
       return hash;
     }
 
@@ -997,31 +1026,54 @@ namespace Msg {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (data_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Data);
+      if (Id != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Id);
+      }
+      if (pos_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Pos);
+      }
+      if (vel_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Vel);
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (data_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Data);
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      }
+      if (pos_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pos);
+      }
+      if (vel_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Vel);
       }
       return size;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(CUpdate other) {
+    public void MergeFrom(CMove other) {
       if (other == null) {
         return;
       }
-      if (other.data_ != null) {
-        if (data_ == null) {
-          data_ = new global::Msg.PlayerData();
+      if (other.Id != 0) {
+        Id = other.Id;
+      }
+      if (other.pos_ != null) {
+        if (pos_ == null) {
+          pos_ = new global::Msg.Vector2();
         }
-        Data.MergeFrom(other.Data);
+        Pos.MergeFrom(other.Pos);
+      }
+      if (other.vel_ != null) {
+        if (vel_ == null) {
+          vel_ = new global::Msg.Vector2();
+        }
+        Vel.MergeFrom(other.Vel);
       }
     }
 
@@ -1033,11 +1085,22 @@ namespace Msg {
           default:
             input.SkipLastField();
             break;
-          case 10: {
-            if (data_ == null) {
-              data_ = new global::Msg.PlayerData();
+          case 8: {
+            Id = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            if (pos_ == null) {
+              pos_ = new global::Msg.Vector2();
             }
-            input.ReadMessage(data_);
+            input.ReadMessage(pos_);
+            break;
+          }
+          case 26: {
+            if (vel_ == null) {
+              vel_ = new global::Msg.Vector2();
+            }
+            input.ReadMessage(vel_);
             break;
           }
         }

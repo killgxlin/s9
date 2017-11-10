@@ -65,8 +65,10 @@ public class Game {
 		if (!lastDir.Equals (dir)) {
 			var d = self.data.Clone ();
 			d.Vel = dir;
-			conn.SendMessage (new Msg.CUpdate {
-				Data = d
+			conn.SendMessage (new Msg.CMove {
+				Id=d.Id,
+				Vel = d.Vel,
+				Pos = d.Pos,
 			});
 		}
 		lastDir = dir.Clone ();

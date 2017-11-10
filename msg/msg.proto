@@ -31,8 +31,10 @@ message CLogin {
 	string account = 1;
 }
 
-message CUpdate {
-	PlayerData data = 1;
+message CMove {
+	int32 id = 1;
+	Vector2 pos = 2;
+	Vector2 vel = 3;
 }
 
 

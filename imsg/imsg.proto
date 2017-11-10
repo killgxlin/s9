@@ -35,6 +35,9 @@ message AuthRep {
 	int32 id = 1;
 }
 
+message AddGhost {
+	Entity entity = 1;
+}
 message SyncGhost {
 	Entity entity = 1;
 }

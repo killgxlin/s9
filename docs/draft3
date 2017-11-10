@@ -1,0 +1,56 @@
+entity
+	id
+	pos // 和cell相关，很重要
+	vel	// 属性，需要同步
+
+	cmove
+		set pos
+		set vel
+
+		pos_change(spos, dpos)
+		vel_change()
+		broad(supdate)	
+	onsync
+		ghost = entity
+		broad(supdate)
+	onswitch
+		add_to_cell
+		for each neighbors {
+			if pos in neighbor {
+				add to neighbor
+			}
+		}
+		broad(sadd, sentercell)
+	update
+		if src diff dst {
+			pos_change
+		}
+
+	switch(spos, dpos) 
+		for each neighbors {
+			if spos in neighbor {
+				remove from neighbor
+			}
+		}
+		remove from src cell
+		send to dst cell
+	pos_change(spos, dpos)
+		if dpos out_border {
+			switch
+			return
+		}
+
+		for each neighbor {
+			if enter_ghost {
+				sync add ghost
+			}
+			if leave_ghost {
+				sync remove ghost
+			}
+		}
+	vel_change()
+		for each neighbor {
+			if dpos in ghost {
+				sync update ghost
+			}
+		}

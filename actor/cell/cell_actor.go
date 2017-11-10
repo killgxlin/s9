@@ -5,7 +5,6 @@ import (
 	"gamelib/actor/plugin/logger"
 	"gamelib/actor/plugin/timer"
 	"gamelib/base/util"
-	"log"
 	"s9/imsg"
 	"s9/msg"
 	"time"
@@ -43,9 +42,9 @@ func (c *cellActor) add(ctx actor.Context, entity *imsg.Entity) {
 	ctx.Request(entity.AgentPID, sadd)
 	c.entities[entity.Data.Id] = entity
 
-	c.updateGhost(ctx, entity)
+	c.addGhost(ctx, entity)
 }
-func (c *cellActor) remove(ctx actor.Context, entity *imsg.Entity, lpos *msg.Vector2) {
+func (c *cellActor) remove(ctx actor.Context, entity *imsg.Entity, spos *msg.Vector2) {
 	_, ok := c.entities[entity.Data.Id]
 	if !ok {
 		return
@@ -58,7 +57,7 @@ func (c *cellActor) remove(ctx actor.Context, entity *imsg.Entity, lpos *msg.Vec
 	}
 	ctx.Request(entity.AgentPID, srem)
 
-	c.removeGhost(ctx, entity.Data.Id, lpos)
+	c.removeGhost(ctx, entity, spos)
 }
 func (c *cellActor) broad(ctx actor.Context, m proto.Message) {
 	for _, e := range c.entities {
@@ -69,8 +68,8 @@ func (c *cellActor) broad(ctx actor.Context, m proto.Message) {
 	}
 
 }
-func (c *cellActor) onSwitchCell(ctx actor.Context, entity *imsg.Entity, lpos *msg.Vector2) {
-	c.remove(ctx, entity, lpos)
+func (c *cellActor) switchCell(ctx actor.Context, entity *imsg.Entity, spos *msg.Vector2) {
+	c.remove(ctx, entity, spos)
 	ctx.Request(entity.AgentPID, &msg.SLeaveCell{CellName: c.cell.Name})
 	dstCellPID := msg.GetCellPID(entity.Data.Pos)
 	ctx.Request(dstCellPID, &imsg.SwitchCellReq{Entity: entity})
@@ -100,22 +99,28 @@ func (c *cellActor) Receive(ctx actor.Context) {
 		ctx.Request(pid, m)
 		c.remove(ctx, entity, entity.Data.Pos)
 
-	case *msg.CUpdate:
-		m = util.Clone(m).(*msg.CUpdate)
-		entity, ok := c.entities[m.Data.Id]
+	case *msg.CMove:
+		m = util.Clone(m).(*msg.CMove)
+		entity, ok := c.entities[m.Id]
 		if !ok {
 			return
 		}
 
-		fmt.Println("msg----------", m.Data)
+		fmt.Println("msg----------", m)
 		fmt.Println("upd----------", entity.Data)
 
-		entity.Data.Vel = m.Data.Vel
-		c.broad(ctx, &msg.SUpdate{Data: m.Data})
-		c.onRelocate(ctx, entity, m.Data.Pos)
+		spos := entity.Data.Pos
+
+		entity.Data.Vel = m.Vel
+		entity.Data.Pos = m.Pos
+
+		c.broad(ctx, &msg.SUpdate{Data: entity.Data})
+
+		c.onPosChange(ctx, entity, spos)
+		c.onVelChange(ctx, entity)
 	case *imsg.SwitchCellReq:
-		log.Println("switch---------", m.Entity.Data)
 		m = util.Clone(m).(*imsg.SwitchCellReq)
+		fmt.Println("switch---------", m.Entity.Data)
 		ctx.Request(
 			m.Entity.AgentPID,
 			&msg.SEnterCell{
@@ -136,30 +141,33 @@ func (c *cellActor) Receive(ctx actor.Context) {
 			if v.Data.Vel.IsZero() {
 				continue
 			}
-			npos := util.Clone(v.Data.Pos).(*msg.Vector2)
-			npos.X = npos.X + v.Data.Vel.X*delta
-			npos.Y = npos.Y + v.Data.Vel.Y*delta
-			c.onRelocate(ctx, v, npos)
+
+			spos := util.Clone(v.Data.Pos).(*msg.Vector2)
+			v.Data.Pos.X = v.Data.Pos.X + v.Data.Vel.X*delta
+			v.Data.Pos.Y = v.Data.Pos.Y + v.Data.Vel.Y*delta
+
+			c.onPosChange(ctx, v, spos)
 		}
 
 		c.lastEv = now
+	case *imsg.AddGhost:
+		m = util.Clone(m).(*imsg.AddGhost)
+
+		e := m.Entity
+		e.CellPID = ctx.Sender()
+		c.entities[e.Data.Id] = e
+
+		c.broad(ctx, &msg.SAdd{Data: []*msg.PlayerData{e.Data}})
+		fmt.Println("broad add", e.Data)
 	case *imsg.SyncGhost:
 		m = util.Clone(m).(*imsg.SyncGhost)
 
 		e := m.Entity
 		e.CellPID = ctx.Sender()
-
-		_, ok := c.entities[e.Data.Id]
 		c.entities[e.Data.Id] = e
 
-		if !ok {
-			c.broad(ctx, &msg.SAdd{Data: []*msg.PlayerData{e.Data}})
-			log.Println("broad add", e.Data)
-			return
-		}
-
 		c.broad(ctx, &msg.SUpdate{Data: e.Data})
-		log.Println("broad update", e.Data)
+		fmt.Println("broad update", e.Data)
 	case *imsg.RemoveGhost:
 		m = util.Clone(m).(*imsg.RemoveGhost)
 
@@ -168,29 +176,45 @@ func (c *cellActor) Receive(ctx actor.Context) {
 	}
 }
 
-func (c *cellActor) onRelocate(ctx actor.Context, e *imsg.Entity, npos *msg.Vector2) {
-	if e.CellPID != nil {
+func (c *cellActor) onPosChange(ctx actor.Context, entity *imsg.Entity, spos *msg.Vector2) {
+	if entity.CellPID != nil {
 		return
 	}
 
-	npos, e.Data.Pos = e.Data.Pos, npos
-
-	if c.cell.OutOfSwitchBorder(e.Data.Pos) {
-		c.onSwitchCell(ctx, e, npos)
+	if c.cell.OutOfSwitchBorder(entity.Data.Pos) {
+		c.switchCell(ctx, entity, spos)
 		return
 	}
 
-	c.syncGhost(ctx, npos, e)
+	c.updateGhost(ctx, spos, entity)
 }
 
-func (c *cellActor) syncGhost(ctx actor.Context, lpos *msg.Vector2, e *imsg.Entity) {
+func (c *cellActor) onVelChange(ctx actor.Context, entity *imsg.Entity) {
+	if entity.CellPID != nil {
+		return
+	}
+
+	c.syncGhost(ctx, entity)
+}
+
+func (c *cellActor) addGhost(ctx actor.Context, e *imsg.Entity) {
 	for _, c := range c.neighbors {
-		lastIn := c.InGhostBorder(lpos)
+		if !c.InGhostBorder(e.Data.Pos) {
+			continue
+		}
+
+		dstCellPID := msg.GetCellPIDByName(c.Name)
+		ctx.Request(dstCellPID, &imsg.AddGhost{e})
+	}
+}
+func (c *cellActor) updateGhost(ctx actor.Context, spos *msg.Vector2, e *imsg.Entity) {
+	for _, c := range c.neighbors {
+		lastIn := c.InGhostBorder(spos)
 		nowIn := c.InGhostBorder(e.Data.Pos)
 		switch {
-		case /*!lastIn &&*/ nowIn:
+		case !lastIn && nowIn:
 			dstCellPID := msg.GetCellPIDByName(c.Name)
-			ctx.Request(dstCellPID, &imsg.SyncGhost{e})
+			ctx.Request(dstCellPID, &imsg.AddGhost{e})
 			fmt.Println("-------enter ghost zone", c.Name)
 		case lastIn && !nowIn:
 			dstCellPID := msg.GetCellPIDByName(c.Name)
@@ -199,23 +223,20 @@ func (c *cellActor) syncGhost(ctx actor.Context, lpos *msg.Vector2, e *imsg.Enti
 		}
 	}
 }
-func (c *cellActor) updateGhost(ctx actor.Context, e *imsg.Entity) {
+func (c *cellActor) syncGhost(ctx actor.Context, entity *imsg.Entity) {
 	for _, c := range c.neighbors {
-		if !c.InGhostBorder(e.Data.Pos) {
-			continue
+		if c.InGhostBorder(entity.Data.Pos) {
+			dstCellPID := msg.GetCellPIDByName(c.Name)
+			ctx.Request(dstCellPID, &imsg.SyncGhost{entity})
 		}
-
-		dstCellPID := msg.GetCellPIDByName(c.Name)
-		ctx.Request(dstCellPID, &imsg.SyncGhost{e})
 	}
 }
-func (c *cellActor) removeGhost(ctx actor.Context, id int32, lpos *msg.Vector2) {
+func (c *cellActor) removeGhost(ctx actor.Context, entity *imsg.Entity, spos *msg.Vector2) {
 	for _, c := range c.neighbors {
-		if !c.InGhostBorder(lpos) {
-			continue
+		if c.InGhostBorder(spos) && !c.InGhostBorder(entity.Data.Pos) {
+			dstCellPID := msg.GetCellPIDByName(c.Name)
+			ctx.Request(dstCellPID, &imsg.RemoveGhost{entity.Data.Id})
 		}
-		dstCellPID := msg.GetCellPIDByName(c.Name)
-		ctx.Request(dstCellPID, &imsg.RemoveGhost{id})
 	}
 }
 
