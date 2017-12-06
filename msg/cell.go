@@ -3,7 +3,6 @@ package msg
 import (
 	"fmt"
 	"gamelib/base/util"
-	"math"
 	"strconv"
 	"strings"
 
@@ -12,14 +11,20 @@ import (
 )
 
 const (
-	CellSize   = 10
+	CellSize   = 20
 	SwitchDist = 2
 	MirrorDist = 4
 )
 
 func GetCellName(pos *Vector2) string {
 	xIdx := int(pos.X / CellSize)
+	if pos.X < 0 {
+		xIdx = xIdx - 1
+	}
 	yIdx := int(pos.Y / CellSize)
+	if pos.Y < 0 {
+		yIdx = yIdx - 1
+	}
 	return fmt.Sprintf("cell_%d_%d", xIdx, yIdx)
 }
 
@@ -37,18 +42,8 @@ func GetCellPID(pos *Vector2) *actor.PID {
 }
 
 func getRangeByIdx(idx int) (float32, float32) {
-	if idx == 0 {
-		return -CellSize, CellSize
-	}
-	var minx, maxx float32
-	sign := math.Abs(float64(idx)) / float64(idx)
-	if sign > 0 {
-		minx = float32(math.Abs(float64(idx)) * CellSize)
-		maxx = float32((math.Abs(float64(idx)) + 1) * CellSize)
-	} else {
-		minx = -float32((math.Abs(float64(idx)) + 1) * CellSize)
-		maxx = -float32(math.Abs(float64(idx)) * CellSize)
-	}
+	minx := float32(float64(idx) * CellSize)
+	maxx := float32(float64(idx+1) * CellSize)
 	return minx, maxx
 }
 

@@ -47,7 +47,6 @@ func testC() {
 }
 
 func main() {
-
 	// consul
 	cp, e := consul.New()
 	if e != nil {

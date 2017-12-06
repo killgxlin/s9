@@ -11,8 +11,8 @@ public class Game {
 		Instance = this;
 
 		handler.SetHandler (this);
-		conn.Connect ("10.235.226.106", 9000);
-		//conn.Connect ("192.168.0.106", 9000);
+		//conn.Connect ("10.235.226.106", 9000);
+		conn.Connect ("192.168.0.109", 9000);
 		cam = Util.AttachStub ("Main Camera");
 
 	}

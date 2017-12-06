@@ -68,7 +68,7 @@ public class Util
 			new Vector3 (box.Minx, 0, box.Miny),
 		};
 
-		r.numPositions = poses.Length;
+		r.positionCount = poses.Length;
 		r.SetPositions (poses);
 		r.startWidth = 0.1f;
 		r.endWidth = 0.1f;
