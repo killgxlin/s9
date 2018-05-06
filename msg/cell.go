@@ -8,6 +8,7 @@ import (
 
 	"github.com/AsynkronIT/protoactor-go/actor"
 	"github.com/AsynkronIT/protoactor-go/cluster"
+	"github.com/AsynkronIT/protoactor-go/remote"
 )
 
 const (
@@ -30,14 +31,18 @@ func GetCellName(pos *Vector2) string {
 
 func GetCellPIDByName(name string) *actor.PID {
 	pid, e := cluster.Get(name, "cell")
-	util.PanicOnErr(e)
+	if e != remote.ResponseStatusCodeOK {
+		panic(e)
+	}
 	return pid
 }
 
 func GetCellPID(pos *Vector2) *actor.PID {
 	name := GetCellName(pos)
 	pid, e := cluster.Get(name, "cell")
-	util.PanicOnErr(e)
+	if e != remote.ResponseStatusCodeOK {
+		panic(e)
+	}
 	return pid
 }
 
